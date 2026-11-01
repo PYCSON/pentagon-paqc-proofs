@@ -1,0 +1,50 @@
+F*_up = 18.919134195733918
+cell_liu_point_rho0.025_v6.json            min-corner  factor 0.9951214780  LB 18.976746833186  certified True  (0 s)
+cell_r0.1_id71_rho0.012_v6.json            min-corner  factor 0.9993441011  LB 18.920850256099  certified True  (0 s)
+  ...boxes 200 accepted 0 vol 0.0 queue 201 last lb 18.852774767506876 15 s
+  ...boxes 400 accepted 0 vol 0.0 queue 401 last lb 18.879872216924632 30 s
+  ...boxes 600 accepted 0 vol 0.0 queue 601 last lb 18.900041381841994 47 s
+  ...boxes 800 accepted 4 vol 0.0078 queue 793 last lb 18.900315756527505 64 s
+  ...boxes 1000 accepted 50 vol 0.0771 queue 901 last lb 18.907326133294415 83 s
+t1_liu_point_rho0.03_rigorous_v6.json      T1 (es)  boxes 2357  leaves 1179  min leaf lower 18.919213341511  certified True  (209 s)
+  ...boxes 200 accepted 0 vol 0.0 queue 201 last lb 18.90115586316662 16 s
+  ...boxes 400 accepted 0 vol 0.0 queue 401 last lb 18.90628309396688 33 s
+  ...boxes 600 accepted 0 vol 0.0 queue 601 last lb 18.90943036059207 53 s
+  ...boxes 800 accepted 0 vol 0.0 queue 801 last lb 18.914461422115505 71 s
+  ...boxes 1000 accepted 0 vol 0.0 queue 1001 last lb 18.910073475279535 89 s
+  ...boxes 1200 accepted 2 vol 0.0059 queue 1197 last lb 18.91234657096851 106 s
+  ...boxes 1400 accepted 8 vol 0.0166 queue 1385 last lb 18.912095617287324 121 s
+  ...boxes 1600 accepted 24 vol 0.0361 queue 1553 last lb 18.918699148330568 139 s
+  ...boxes 1800 accepted 57 vol 0.0737 queue 1687 last lb 18.91635141396624 156 s
+  ...boxes 2000 accepted 102 vol 0.1108 queue 1797 last lb 18.918419291104332 172 s
+  ...boxes 2200 accepted 165 vol 0.1604 queue 1871 last lb 18.91711148455678 191 s
+  ...boxes 2600 accepted 343 vol 0.2625 queue 1915 last lb 18.918478816605674 225 s
+  ...boxes 3000 accepted 547 vol 0.3728 queue 1907 last lb 18.917499110637007 258 s
+  ...boxes 3200 accepted 632 vol 0.4252 queue 1937 last lb 18.917487029942983 275 s
+  ...boxes 3600 accepted 841 vol 0.5156 queue 1919 last lb 18.918773265187916 308 s
+  ...boxes 4000 accepted 1067 vol 0.6049 queue 1867 last lb 18.91843917959366 342 s
+  ...boxes 4400 accepted 1316 vol 0.6686 queue 1769 last lb 18.918748366819298 377 s
+  ...boxes 6000 accepted 2665 vol 0.9225 queue 671 last lb 18.918996394119734 510 s
+t1_r0.1_id71_rho0.015_rigorous_v6.json     T1 (es)  boxes 6735  leaves 3368  min leaf lower 18.919134372419  certified True  (572 s)
+  ...boxes 200 accepted 0 vol 0.0 queue 201 last lb 18.2303392982908 37 s
+  ...boxes 400 accepted 0 vol 0.0 queue 401 last lb 18.47331844393574 75 s
+  ...boxes 600 accepted 0 vol 0.0 queue 601 last lb 18.546976364670545 111 s
+  ...boxes 800 accepted 0 vol 0.0 queue 801 last lb 18.6147826160993 147 s
+  ...boxes 1000 accepted 0 vol 0.0 queue 1001 last lb 18.67808813520831 181 s
+  ...boxes 1200 accepted 0 vol 0.0 queue 1201 last lb 18.50743286032627 218 s
+  ...boxes 1400 accepted 1 vol 0.001 queue 1399 last lb 18.6427260798995 253 s
+  ...boxes 1600 accepted 1 vol 0.001 queue 1599 last lb 18.84889481483834 291 s
+  ...boxes 1800 accepted 2 vol 0.002 queue 1797 last lb 18.67470519468654 328 s
+  ...boxes 2000 accepted 3 vol 0.0024 queue 1995 last lb 18.826223366672398 369 s
+  ...boxes 2200 accepted 6 vol 0.0044 queue 2189 last lb 18.727923366609087 412 s
+  ...boxes 2400 accepted 16 vol 0.0103 queue 2369 last lb 18.909712148609234 454 s
+  ...boxes 2600 accepted 44 vol 0.0254 queue 2513 last lb 18.73878614136269 496 s
+  ...boxes 2800 accepted 81 vol 0.0437 queue 2639 last lb 18.71794912002709 538 s
+  ...boxes 3000 accepted 158 vol 0.0776 queue 2685 last lb 18.730960056132812 581 s
+  ...boxes 3400 accepted 366 vol 0.1538 queue 2669 last lb 18.82198019086276 674 s
+  ...boxes 3600 accepted 530 vol 0.2124 queue 2541 last lb 18.84699271096447 726 s
+  ...boxes 3800 accepted 691 vol 0.2649 queue 2419 last lb 18.78414697623542 770 s
+  ...boxes 5600 accepted 2281 vol 0.7451 queue 1039 last lb 18.832073884430113 1123 s
+t1_id301_rho0.0239_rigorous_v6.json        T1 (both)  boxes 6669  leaves 3335  min leaf lower 18.919156377569  certified True  (1311 s)
+t1_r0.1_id71_rho0.012_rigorous_v6.json     T1 (es)  boxes 439  leaves 220  min leaf lower 18.919185214596  certified True  (32 s)
+ALL CELLS CERTIFIED

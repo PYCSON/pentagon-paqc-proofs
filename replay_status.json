@@ -1,0 +1,47 @@
+{
+ "intro": "A second party (GPT, OpenAI) wrote independent checkers that share no source with the producer and never executed the producer code. ``PASS'' means that the independent bound is at least as strong as the one used by the producer certificate. The table separates checks of saved certificate data from independent recomputation.",
+ "items": [
+  {
+   "item": "Upper bound $F_*^{\\rm up}$ for the regular pentagon",
+   "status": "PASS",
+   "method": "conforming $P_2$ FEM Rayleigh quotient on an inscribed rational pentagon, exact integration with directed rounding: $F_*\\le18.919118220170337$ (source and logs: \\texttt{second\\_party/p2\\_fem}; the trial vector of the logged run is not archived, so the value is a historical log and a rerun certifies a fresh bound)"
+  },
+  {
+   "item": "Convexity gate (all six certificates)",
+   "status": "PASS",
+   "method": "exact rational corner determinants"
+  },
+  {
+   "item": "B\\&B leaves form an exact dyadic partition of $[-1,1]^6$ (C--F); coverage only",
+   "status": "PASS (8{,}102 leaves)",
+   "method": "exact dyadic tree reconstruction"
+  },
+  {
+   "item": "Internal consistency of the 384 saved corner records ($\\mu<1$, index inequality)",
+   "status": "PASS",
+   "method": "rational re-parsing of all saved balls; a check of saved data, not a recomputation"
+  },
+  {
+   "item": "Min-corner geometry factor, certificates A and B (boxes 1, 3)",
+   "status": "PASS 2/2",
+   "method": "exact \\texttt{Fraction} recomputation (factor $0.995193\\ge0.995121$, $0.999346\\ge0.999344$)"
+  },
+  {
+   "item": "Corner eigenvalue lower bounds, certificates A and B (boxes 1, 3) (128 corners)",
+   "status": "PASS 128/128",
+   "method": "own interval Bessel series with tail bounds, third-order Taylor boundary bound, disk $L^2$ bound, FHM, Krahn--Szeg\\H{o} index, on the exported coefficients; results in \\texttt{second\\_party/results/}; smallest margin over the producer bound 2.4e-05"
+  },
+  {
+   "item": "Corner eigenvalue lower bounds, worst corner of each of C, D, E",
+   "status": "PASS 3/3",
+   "method": "as above"
+  },
+  {
+   "item": "Whole-leaf lower bounds of the T1 form (C--F)",
+   "status": "not yet replayed",
+   "method": "not done: an independent second-order Taylor implementation reproduces the centre values and gradients of $Q_k$ (220 leaves of F, to $4\\cdot10^{-15}$) but does not yet bound whole leaves"
+  }
+ ],
+ "conclusion": "Boxes 1 and 3 (certificates A and B) are fully replayed by the second party: geometry factors (exact fractions), all 128 corner eigenvalue lower bounds and the regular-pentagon upper bound (from a logged run whose trial vector is not archived). Certificates C--F are producer certificates whose whole-leaf bounds have not yet been replayed independently, and should be regarded accordingly.",
+ "abstract": "for boxes 1 and 3 (certificates A and B) every load-bearing component -- geometry factors, all 128 corner eigenvalue bounds and the regular-pentagon bound -- has been recomputed by independent code."
+}

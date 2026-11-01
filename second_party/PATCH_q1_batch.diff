@@ -1,0 +1,4 @@
+18c18
+<   run=subprocess.run(cmd,text=True,capture_output=True,timeout=240)
+---
+>   run=subprocess.run(cmd,text=True,capture_output=True,timeout=7200)

@@ -1,0 +1,22 @@
+--- q1_batch.py
++++ q1_batch_mu_guard.py
+@@ -39,10 +39,16 @@
+  area=iv.mpf(0)
+  for j in range(5): area+=M.cross(V[j],V[(j+1)%5])/2
+  mu=iv.sqrt(area)*iv.mpf([str(sup),str(math.nextafter(sup,math.inf))])/iv.sqrt(iv.mpf(str(l2)))
+- lam=M.Q(data['lam_tilde']); flo=M.low(lam/(1+mu)*area);lhs=M.high(lam/(1-mu)*area)
++ lam=M.Q(data['lam_tilde']); flo=M.low(lam/(1+mu)*area)
++ mu_hi=M.high(mu)
++ # FHM gives a finite upper eigenvalue bound only for mu < 1.
++ # Fail closed before ever dividing by 1-mu.
++ mu_ok=(mu_hi < 1.0)
++ lhs=M.high(lam/(1-mu)*area) if mu_ok else None
+  producer=float(data['producer_F_lo_v6']);margin=flo-producer
+- status='PASS' if margin>=0 and lhs<36.33682907107446 else 'FAIL'
+- return {'file':f,'corner':c,'status':status,'F_lo':flo,'producer_F_lo_v6':producer,'margin':margin,'mu_upper':M.high(mu),'HKS_left_upper':lhs,'HKS_pass':lhs<36.33682907107446,'N':n,'sup':sup,'L2_lower':l2}
++ hks_ok=bool(mu_ok and lhs < 36.33682907107446)
++ status='PASS' if margin>=0 and hks_ok else 'FAIL'
++ return {'file':f,'corner':c,'status':status,'F_lo':flo,'producer_F_lo_v6':producer,'margin':margin,'mu_upper':mu_hi,'mu_lt_1':mu_ok,'HKS_left_upper':lhs,'HKS_pass':hks_ok,'N':n,'sup':sup,'L2_lower':l2}
+ if __name__=='__main__':
+  ap=argparse.ArgumentParser();ap.add_argument('--N',type=int,default=300);ap.add_argument('--corners',type=int,default=64);ap.add_argument('--files',type=int,default=2);ap.add_argument('--workers',type=int,default=3);ap.add_argument('--edge-limit',type=int,default=5);args=ap.parse_args()
+  items=[]

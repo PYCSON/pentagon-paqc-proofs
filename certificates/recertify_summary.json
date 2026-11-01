@@ -1,0 +1,51 @@
+{
+ "Fstar_up_outward": 18.919134195733918,
+ "rows": [
+  {
+   "file": "cell_liu_point_rho0.025_v6.json",
+   "certified": true,
+   "sec": 0.1,
+   "LB": 18.97674683318576,
+   "margin": 0.057612637451843085
+  },
+  {
+   "file": "cell_r0.1_id71_rho0.012_v6.json",
+   "certified": true,
+   "sec": 0.1,
+   "LB": 18.920850256099328,
+   "margin": 0.0017160603654104989
+  },
+  {
+   "file": "t1_r0.1_id71_rho0.012_rigorous_v6.json",
+   "certified": true,
+   "sec": 16.9,
+   "boxes": 439,
+   "min_lower": 18.91918521459607,
+   "margin": 5.1018862151863686e-05
+  },
+  {
+   "file": "t1_r0.1_id71_rho0.015_rigorous_v6.json",
+   "certified": true,
+   "sec": 259.9,
+   "boxes": 6735,
+   "min_lower": 18.919134372418515,
+   "margin": 1.766845976192144e-07
+  },
+  {
+   "file": "t1_liu_point_rho0.03_rigorous_v6.json",
+   "certified": true,
+   "sec": 90.3,
+   "boxes": 2357,
+   "min_lower": 18.91921334151101,
+   "margin": 7.914577709300374e-05
+  },
+  {
+   "file": "t1_id301_rho0.0239_rigorous_v6.json",
+   "certified": true,
+   "sec": 574.4,
+   "boxes": 6669,
+   "min_lower": 18.919156377569227,
+   "margin": 2.2181835308998643e-05
+  }
+ ]
+}

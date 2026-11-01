@@ -1,0 +1,250 @@
+{
+ "model": "Cost of a rigorous PAQC cover of the near region from the run3 measurements (Claude, 2026-11-01, revised after\nGPT PENT-07 NEW-01 and PENT-08 NEW-03/04).\n\nInput: the run3 output folder (results.jsonl, summary.json, SHA256SUMS from the user's machine) and the run2 centre\nfile (directions d; the centre is x = x_* + r d).\nModel (an ESTIMATE, not a proof: run3 uses float corner eigenvalues minus a 2e-5 relative margin):\n  * centre i at chart distance r_i has certified T1 half-widths rho tested on a ~9% grid; q = rho / r;\n  * the centres are log-uniform in r on [0.02, 0.6] with uniform directions, so for any region W of the chart and the\n    size field rho(x) defined by the rule below, (pi^3/64) ln(b/a) mean_band(1_W q^-6), averaged over ALL sampled\n    centres of the band, is an unbiased Monte Carlo estimate of the continuum proxy  int_{W cap shell} (2 rho(x))^-6 dx\n    (shell measure pi^3 r^5 dr).  It is not the number of boxes of a constructed cover (boundary crossings, grid\n    interfaces, overlaps and certification overhead are not counted).  A centre outside W contributes 0 whether or not\n    it passed; a centre inside W that did not pass makes the estimate undefined, and the program stops (GPT PENT-08\n    NEW-03: rc2 dropped the three failed centres, all outside D, from the denominator, +2.2% on [0.02, 0.05));\n  * a proof only needs one labelling of each pentagon.  We take W = D, the Dirichlet domain of the D5 relabelling\n    action: the points whose identity labelling is (weakly) the closest of their 10 labellings to x_*.  The action is\n    NOT an isometry of the chart (at x_* the Jacobian of a cyclic shift has singular values 2.66, 2.66, 1, 1, 0.375,\n    0.375), so D does not take 1/10 of a shell; the earlier '/10' discount (cost_estimate rc1) was wrong.  About 71%\n    of the sampled centres lie in D;\n  * cost per cell = corners amortised on a grid (C corners per cell, t_c CPU seconds per strict corner) + the\n    branch-and-bound time measured at that size; per centre the tested passing size with the smallest cost per\n    volume is used (sizes below the tested ones were not measured and may be cheaper);\n  * uncertainty: 95% bootstrap interval over centres (resampled within each band); a uniform-shrink model\n    s * rho_max with bb(s) = bb(rho_max) s^beta (beta from GPT PENT-07: quartiles 11.26 / 12.88 pooled / 14.20).",
+ "corner_sec": 19.5,
+ "corners_per_cell": 1.5,
+ "n_centres": 480,
+ "n_ok": 477,
+ "n_not_ok": 3,
+ "n_in_D": 343,
+ "shift_jacobian_sv": [
+  2.6636678015348756,
+  2.663667801341344,
+  0.9999999999934527,
+  0.9999999999628162,
+  0.37542219019176837,
+  0.3754221901696939
+ ],
+ "bands": [
+  {
+   "band": [
+    0.02,
+    0.05
+   ],
+   "centres": 142,
+   "passed": 139,
+   "in_D": 106,
+   "q_median_D": 0.14955209934524277,
+   "cells": 30158769.511590466,
+   "bb_sec_weighted": 63.916061452843344,
+   "sec_per_cell": 93.16606145284334,
+   "cpu_days": 32520.529787719614,
+   "cpu_days_ci95": [
+    261.40919228547943,
+    92778.2737961753
+   ],
+   "cells_full_shell": null,
+   "cpu_days_full_shell": null,
+   "top": [
+    {
+     "id": 19,
+     "r": 0.028729759697527838,
+     "edge_ratio": 1.0259964695564738,
+     "share": 0.856807893908891
+    },
+    {
+     "id": 70,
+     "r": 0.021775865221228825,
+     "edge_ratio": 1.023659593410753,
+     "share": 0.12079995695891613
+    },
+    {
+     "id": 208,
+     "r": 0.02071291677106562,
+     "edge_ratio": 1.0213564350440367,
+     "share": 0.014444752426271521
+    }
+   ],
+   "no_pass_outside_D": 3
+  },
+  {
+   "band": [
+    0.05,
+    0.2
+   ],
+   "centres": 209,
+   "passed": 209,
+   "in_D": 146,
+   "q_median_D": 0.15090653629853684,
+   "cells": 98265.3449766264,
+   "bb_sec_weighted": 293.5794212146492,
+   "sec_per_cell": 322.8294212146492,
+   "cpu_days": 367.1637088456265,
+   "cpu_days_ci95": [
+    276.77374727790647,
+    480.4366919913527
+   ],
+   "cells_full_shell": 376509.6742376127,
+   "cpu_days_full_shell": 1509.4030898026556,
+   "top": [
+    {
+     "id": 463,
+     "r": 0.19119074402382738,
+     "edge_ratio": 1.2187368204594995,
+     "share": 0.10484494351129535
+    },
+    {
+     "id": 295,
+     "r": 0.08691461946898732,
+     "edge_ratio": 1.098802500266246,
+     "share": 0.05068007091790999
+    },
+    {
+     "id": 387,
+     "r": 0.09686876258987812,
+     "edge_ratio": 1.1121841988380068,
+     "share": 0.038314503650754186
+    }
+   ],
+   "no_pass_outside_D": 0
+  },
+  {
+   "band": [
+    0.2,
+    0.6
+   ],
+   "centres": 129,
+   "passed": 129,
+   "in_D": 91,
+   "q_median_D": 0.1153033728012852,
+   "cells": 2896797.250281233,
+   "bb_sec_weighted": 84.28662816974663,
+   "sec_per_cell": 113.53662816974663,
+   "cpu_days": 3806.6272255593144,
+   "cpu_days_ci95": [
+    998.4538529817819,
+    8974.828538060572
+   ],
+   "cells_full_shell": 3253483.8091772026,
+   "cpu_days_full_shell": 5598.636112231664,
+   "top": [
+    {
+     "id": 301,
+     "r": 0.5737851388440011,
+     "edge_ratio": 3.3207579686509217,
+     "share": 0.6286191450643045
+    },
+    {
+     "id": 91,
+     "r": 0.5839701632822467,
+     "edge_ratio": 3.0656500904943758,
+     "share": 0.06379033937456807
+    },
+    {
+     "id": 437,
+     "r": 0.541439455171461,
+     "edge_ratio": 2.8908298709182265,
+     "share": 0.02985669001717952
+    }
+   ],
+   "no_pass_outside_D": 0
+  }
+ ],
+ "totals": {
+  "all_cells": 33153832.106848326,
+  "L4_cells": 2995062.595257859,
+  "all_cpu_days": 36694.320722124554,
+  "L4_cpu_days": 4173.790934404941,
+  "L4_cpu_days_ci95": [
+   1350.006160146573,
+   9304.75132386563
+  ],
+  "L4_cpu_days_without_top": {
+   "id": 301,
+   "cpu_days": 1791.916779744166
+  }
+ },
+ "shrink_model": [
+  {
+   "s": 0.7,
+   "beta": 11.26,
+   "L4_cpu_days": 7090.160621691425
+  },
+  {
+   "s": 0.7,
+   "beta": 12.88,
+   "L4_cpu_days": 6574.805217694746
+  },
+  {
+   "s": 0.7,
+   "beta": 14.2,
+   "L4_cpu_days": 6327.382950312594
+  },
+  {
+   "s": 0.8,
+   "beta": 11.26,
+   "L4_cpu_days": 5025.323832576422
+  },
+  {
+   "s": 0.8,
+   "beta": 12.88,
+   "L4_cpu_days": 4306.260786839951
+  },
+  {
+   "s": 0.8,
+   "beta": 14.2,
+   "L4_cpu_days": 3884.976859223864
+  },
+  {
+   "s": 0.9,
+   "beta": 11.26,
+   "L4_cpu_days": 5713.824210801023
+  },
+  {
+   "s": 0.9,
+   "beta": 12.88,
+   "L4_cpu_days": 5022.755431432576
+  },
+  {
+   "s": 0.9,
+   "beta": 14.2,
+   "L4_cpu_days": 4540.652716418998
+  },
+  {
+   "s": 1.0,
+   "beta": 11.26,
+   "L4_cpu_days": 8361.654871488841
+  },
+  {
+   "s": 1.0,
+   "beta": 12.88,
+   "L4_cpu_days": 8361.654871488841
+  },
+  {
+   "s": 1.0,
+   "beta": 14.2,
+   "L4_cpu_days": 8361.654871488841
+  }
+ ],
+ "not_ok": [
+  {
+   "id": 75,
+   "r": 0.02058590678768533,
+   "in_D": false,
+   "closest_labelling_distance": 0.012908363700532912,
+   "whys": [
+    "corner<=F*"
+   ],
+   "smallest_rho_tested": 0.0004940717351848386
+  },
+  {
+   "id": 340,
+   "r": 0.021342576741259053,
+   "in_D": false,
+   "closest_labelling_distance": 0.018348336125214925,
+   "whys": [
+    "corner<=F*"
+   ],
+   "smallest_rho_tested": 0.0005519999292406505
+  },
+  {
+   "id": 479,
+   "r": 0.024055342426999932,
+   "in_D": false,
+   "closest_labelling_distance": 0.017253827969683905,
+   "whys": [
+    "corner<=F*"
+   ],
+   "smallest_rho_tested": 0.000490576608113602
+  }
+ ]
+}

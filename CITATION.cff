@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use these certificates, checkers or the method, please cite them as below."
+type: software
+title: "Certified lower bounds for λ1·Area on cells of pentagon shape space by piecewise-affine transplantation (computer-assisted proof candidate for the stated cells, not peer reviewed)"
+authors:
+  - family-names: "Sun"
+    given-names: "Puyi"
+    orcid: "https://orcid.org/0009-0004-1644-5300"
+version: "1.0"
+license: "CC-BY-4.0"
+repository-code: "https://github.com/PYCSON/pentagon-paqc-proofs"
+keywords:
+  - "Pólya–Szegő conjecture"
+  - "Dirichlet eigenvalue"
+  - "pentagon"
+  - "transplantation"
+  - "interval arithmetic"
+  - "computer-assisted proof"

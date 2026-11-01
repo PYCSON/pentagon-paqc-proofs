@@ -1,0 +1,16 @@
+{
+  "title": "Certified lower bounds for λ1·Area on cells of pentagon shape space by piecewise-affine transplantation",
+  "upload_type": "software",
+  "description": "<p><strong>Computer-assisted proof candidate (for the stated cells), not peer reviewed.</strong> This is not a proof of the Pólya–Szegő conjecture for pentagons, nor of any statement about a neighbourhood of the regular pentagon.</p><p>A method (PAQC) that certifies F(P) = λ1(P)·|P| &gt; F(regular pentagon) simultaneously for every pentagon P in a six-dimensional box of shape space, using only the first Dirichlet eigenvalues of the 64 corner pentagons and exact matrix inequalities from a piecewise-affine transplantation; six certificates for five boxes, evaluated in ball arithmetic; a partial independent second-party replay; a short paper; and an estimate of the cost of covering a whole region. AI assistance is disclosed in README.md. Licences: text and data CC BY 4.0; code MIT.</p>",
+  "creators": [
+    {"name": "Sun, Puyi", "orcid": "0009-0004-1644-5300"}
+  ],
+  "license": "cc-by-4.0",
+  "keywords": ["Pólya–Szegő conjecture", "Dirichlet eigenvalue", "pentagon", "transplantation", "interval arithmetic", "computer-assisted proof"],
+  "related_identifiers": [
+    {"identifier": "arXiv:2406.11575", "relation": "references", "scheme": "arxiv"},
+    {"identifier": "arXiv:2609.18500", "relation": "references", "scheme": "arxiv"},
+    {"identifier": "10.5281/zenodo.23066520", "relation": "references", "scheme": "doi"}
+  ],
+  "version": "1.0"
+}

@@ -1,0 +1,290 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{textcomp}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\title{Certified lower bounds for $\lambda_1\cdot\mathrm{Area}$ on cells of pentagon shape space\\
+by piecewise-affine transplantation\\[4pt]
+\large Computer-assisted proof candidate (for the stated cells), not peer reviewed}
+\author{Puyi Sun\thanks{ORCID 0009-0004-1644-5300. See Section~\ref{sec:ai} for the roles of AI systems in this work.}}
+\date{1 November 2026 \quad (version 1.0)}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a planar domain $\Omega$ let $F(\Omega)=\lambda_1(\Omega)\,|\Omega|$, where $\lambda_1$ is the first Dirichlet
+eigenvalue of the Laplacian. The P\'olya--Szeg\H{o} conjecture asserts that among pentagons the regular one minimises $F$;
+its value is $F_*\approx 18.9191043$. We describe a method that certifies $F(P)>F_*$ simultaneously for \emph{every}
+pentagon $P$ in a box (``cell'') of a six-dimensional shape chart, using only the first eigenvalues of the $64$ corner
+pentagons of the box and explicit matrix inequalities obtained from a piecewise-affine transplantation onto a fixed
+reference fan. Everything is evaluated in ball arithmetic. We present six certificates for five distinct parameter boxes
+at three centre locations (two certificates apply different methods to the same box), including the cell identified as
+hardest in a publicly available outward-continuation prototype \cite{liu}, and a partial independent second-party replay
+of certificate components (Section~\ref{sec:replay}): for boxes 1 and 3 (certificates A and B) every load-bearing component -- geometry factors, all 128 corner eigenvalue bounds and the regular-pentagon bound -- has been recomputed by independent code. This is a method and a set of cell certificates; it is \emph{not} a proof of
+the conjecture, nor of any statement about a neighbourhood of the regular pentagon.
+\end{abstract}
+
+\section{Background}
+P\'olya and Szeg\H{o} proved that the equilateral triangle and the square minimise $F$ among triangles and
+quadrilaterals, $F\ge 4\pi^2/\sqrt3$ and $F\ge 2\pi^2$ respectively, and conjectured the same for $n$-gons with
+$n\ge5$ \cite{ps}. Bogosel and Bucur reduced the case of fixed $n$ to a finite (if large) computation and proved local
+minimality of the regular pentagon and hexagon with validated computing \cite{bb-jep,bb-val}; local minimality of the
+regular heptagon and octagon was certified in \cite{ep}; an explicit local ball around the regular pentagon and a
+prototype of an outward continuation were published in \cite{liu}; the conjecture is known for convex polygons with
+sufficiently many sides \cite{cghl}. To our knowledge (two independent literature searches, October 2026) the global
+pentagon case remains open. The present note contributes a cell-certification tool for the region away from the
+regular pentagon; we make no claim of priority beyond the specific method and certificates described here.
+
+\section{Chart, reference fan and transplantation}
+A pentagon is $P(x)$ with vertices $V_0=(0,0)$, $V_1=(1,0)$, $V_2=(x_1,x_2)$, $V_3=(x_3,x_4)$, $V_4=(x_5,x_6)$,
+counter-clockwise. $F$ is invariant under similarities. Let $P_0$ be a fixed regular pentagon (binary64 vertices taken
+exactly) with vertex centroid $c_0$, and $T_k=\mathrm{conv}(c_0,P_{0,k},P_{0,k+1})$, $E_k=[P_{0,k}-c_0,\;P_{0,k+1}-c_0]$.
+For $P=P(x)$ with vertex centroid $c$ put
+\[
+D_k=[V_k-c,\;V_{k+1}-c]\,E_k^{-1},\qquad J_k=\det D_k,\qquad G_k=J_k\,D_k^{-1}D_k^{-T}\qquad(k=0,\dots,4).
+\]
+If $P$ is strictly convex, $c$ is interior, every $J_k>0$ and the piecewise-affine map $\Phi$ equal to
+$y\mapsto c+D_k(y-c_0)$ on $T_k$ is a bi-Lipschitz homeomorphism $P_0\to P$; then
+\begin{equation}\label{eq:rq}
+\lambda_1(P)=\inf_{0\ne v\in H^1_0(P_0)}\frac{\sum_k\int_{T_k}\nabla v^{T}G_k\nabla v}{\sum_k J_k\int_{T_k}v^2},
+\qquad |P|=\sum_k |T_k|\,J_k .
+\end{equation}
+\emph{Convexity gate.} The $15$ determinants $\det(V_{i+1}-V_i,\,V_j-V_i)$, $j\notin\{i,i+1\}$, are affine in each
+coordinate of $x$; positivity at the $64$ corners of a box therefore implies strict convexity on the whole box.
+(Positivity of the $J_k$ alone does not suffice: the regular pentagram is a counterexample.)
+
+\section{The cell inequality}
+A cell is a box $C=\prod_i[\ell_i,h_i]$ with binary64 endpoints. Write $x(u)=\ell+(h-\ell)\odot(1+u)/2$,
+$u\in[-1,1]^6$, let $x_c$ ($c\in\{\pm1\}^6$) be the corners and $\alpha_c(u)=\prod_i(1+c_iu_i)/2$ the product
+(multilinear) weights; $D_{c,k},J_{c,k},G_{c,k}$ denote the corner quantities.
+
+\begin{lemma}[exact interpolation]\label{lem:interp}
+$D_k(x(u))=\sum_c\alpha_c(u)D_{c,k}$ and $J_k(x(u))=\sum_c\alpha_c(u)J_{c,k}$.
+\end{lemma}
+\begin{proof}
+$D_k$ is affine in $x$ and multilinear interpolation reproduces affine functions. $J_k$ is a quadratic polynomial in
+$x$ whose pure squares vanish: the derivative of $D_k$ in a single coordinate $x_i$ moves one coordinate of one vertex
+and has rank $\le1$, so its determinant is $0$; hence $J_k$ is multiaffine and equals its multilinear interpolant.
+\end{proof}
+
+\begin{lemma}[covariance identity]\label{lem:cov}
+With $X_c=D_{c,k}^{-1}$, $w_c=\alpha_cJ_{c,k}/J_k$, $M=\sum_cw_cX_c$ and $S_k=\sum_c\alpha_cG_{c,k}$,
+\[
+G_k=S_k-J_k\,\mathcal V_k,\qquad \mathcal V_k=\sum_cw_c(X_c-M)(X_c-M)^T\succeq0 .
+\]
+\end{lemma}
+\begin{proof}
+For $2\times2$ matrices the adjugate is linear, so $\mathrm{adj}\,D_k=\sum_c\alpha_c\,\mathrm{adj}\,D_{c,k}=J_k M$;
+then $G_k=\mathrm{adj}D_k(\mathrm{adj}D_k)^T/J_k=J_kMM^T$ and $\sum_c\alpha_cG_{c,k}=J_k\sum_cw_cX_cX_c^T$.
+\end{proof}
+
+\begin{lemma}[matrix Efron--Stein]\label{lem:es}
+Let $G_l\succ0$ satisfy $G_l\preceq G_{c,k}$ for all corners, $J^{\max}_k=\max_cJ_{c,k}$, $p_iq_i=(1-u_i^2)/4$, and for
+each coordinate $i$ let $\Delta_i^{(e)}$ be the $32$ edge differences $X_c-X_{c'}$ ($c,c'$ differing in coordinate $i$),
+$R_i$ their mean and $d^{(e)}_i=\Delta^{(e)}_i-R_i$. Then for every $\tau>0$
+\[
+J_k\mathcal V_k\preceq \epsilon_k(u)\,G_l\preceq\epsilon_k(u)\,S_k,
+\]
+\begin{multline*}
+\epsilon_k(u)=J^{\max}_k\Big[(1+\tau)\,\lambda_{\max}\Big(G_l^{-1/2}\sum_ip_iq_iR_iR_i^TG_l^{-1/2}\Big)\\
++\big(1+\tfrac1\tau\big)\sum_ip_iq_i\max_e\lambda_{\max}\big(d_i^{(e)T}G_l^{-1}d_i^{(e)}\big)\Big].
+\end{multline*}
+\end{lemma}
+\begin{proof}
+$J_k\mathcal V_k\preceq\sum_c\alpha_cJ_{c,k}(X_c-\bar X)(X_c-\bar X)^T\preceq J^{\max}_k\,\mathrm{Var}_\alpha(X)$ for the
+$\alpha$-mean $\bar X$. The Efron--Stein inequality for the product measure $\alpha$, applied to every scalar projection,
+gives the Loewner bound $\mathrm{Var}_\alpha(X)\preceq\sum_ip_iq_i\,\mathbb E_\alpha[\Delta_i\Delta_i^T]$, and
+$(R+d)(R+d)^T\preceq(1+\tau)RR^T+(1+\tau^{-1})dd^T$ \cite{es}.
+\end{proof}
+
+\emph{Choice of $G_l$.} For each sector let $G_{\rm cen}=\frac1{64}\sum_cG_{c,k}$. Two admissible candidates are computed
+in ball arithmetic: (a) $G_{\rm cen}-\eta I$ with $\eta\ge\max_c\|G_{c,k}-G_{\rm cen}\|_2$, if it is positive definite;
+(b) $\mu_lG_{\rm cen}$ with $0<\mu_l\le\min_c\lambda_{\min}(G_{\rm cen}^{-1/2}G_{c,k}G_{\rm cen}^{-1/2})$ (the smallest root
+of $\det(G_{c,k}-\mu G_{\rm cen})=0$, rounded down). Both satisfy $G_l\preceq G_{c,k}$ for every corner; the certificate
+uses the one with the larger $\lambda_{\min}(G_{\rm cen}^{-1}G_l)$ (a choice, not a bound), and asserts $G_l\succ0$.
+($\mu_l$ is unrelated to the quantity $\mu$ of Section~4.) The value of $\tau$ is the best of a fixed finite list.
+
+\begin{theorem}[cell bound]\label{thm:cell}
+Let $F^L_c\le F(P(x_c))$ be certified corner lower bounds, $\lambda^L_c=F^L_c/|P(x_c)|$, and suppose the convexity gate
+holds on $C$ and $\epsilon_k(u)<1$. Then for every $u\in[-1,1]^6$
+\begin{equation}\label{eq:t1}
+F(P(x(u)))\;\ge\;\Big(1-\max_k\epsilon_k(u)\Big)\,\min_k\,|P(x(u))|\,\frac{\sum_c\alpha_c(u)\,\lambda^L_c\,J_{c,k}}{J_k(x(u))} .
+\end{equation}
+\end{theorem}
+\begin{proof}
+By Lemmas~\ref{lem:cov}--\ref{lem:es}, $G_k\succeq(1-\epsilon_k)S_k$. For $v\in H^1_0(P_0)$ the numerator of
+\eqref{eq:rq} is $\ge\sum_k(1-\epsilon_k)\sum_c\alpha_cN_{c,k}(v)\ge(1-\max_k\epsilon_k)\sum_c\alpha_cN_c(v)$, where
+$N_c=\sum_kN_{c,k}$ is the numerator for the corner $P(x_c)$, and $N_c(v)\ge\lambda_c\sum_kJ_{c,k}\int_{T_k}v^2$.
+The denominator is $\sum_kJ_k\int_{T_k}v^2$ by Lemma~\ref{lem:interp}; a ratio of positive sums is at least the smallest
+termwise ratio. (The corner Rayleigh inequality holds only for the sum over sectors, which is why the factor is
+$1-\max_k\epsilon_k$ and not paired sector by sector.)
+\end{proof}
+
+\emph{Exact-covariance alternative.} By Lemma~\ref{lem:cov}, $S_k-G_k\succeq0$, so
+\[
+e_k(u)=\lambda_{\max}\big(S_k^{-1/2}(S_k-G_k)S_k^{-1/2}\big)\in[0,1)
+\]
+satisfies $G_k\succeq(1-e_k)S_k$ directly; here $S_k$ and $\mathrm{adj}\,D_k$ (hence
+$G_k=\mathrm{adj}D_k(\mathrm{adj}D_k)^T/J_k$) are multiaffine. Any upper bound of
+$\epsilon_k$ or $e_k$ may be used in place of $\epsilon_k$ in Theorem~\ref{thm:cell}.
+
+Two ways of using \eqref{eq:t1} are implemented.
+
+\emph{Min-corner form.} Write $f_k=J_k/|P|$ and $I(f_k)=\sum_c\alpha_c f_k(x_c)$, so that with
+$\lambda^L_c\ge F_{\min}/|P(x_c)|$, $F_{\min}=\min_cF^L_c$, the $k$-th term of \eqref{eq:t1} is at least
+$F_{\min}\,I(f_k)/f_k$. Tensor-linear interpolation gives $|I(f_k)-f_k|\le\mathrm{err}_k=\sum_i\frac{(h_i-\ell_i)^2}{8}
+\sup_C|\partial_i^2f_k|$ with the full side lengths $h_i-\ell_i$, the supremum being enclosed on $64$ sub-boxes whose
+union is $C$ (interval evaluation, asserted coverage). With $f_k^{\min}$ a positive lower bound of $f_k$ on $C$ and
+$\epsilon_k$ evaluated at $p_iq_i=1/4$ (its maximum over $u$),
+\[
+F(P)\ \ge\ F_{\min}\cdot\min_k(1-\epsilon_k)\cdot\Big(1-\max_k\frac{\mathrm{err}_k}{f_k^{\min}}\Big)=:\mathrm{factor}\cdot F_{\min}
+\quad\text{on all of }C,
+\]
+provided all $J_{c,k}>0$, $f_k^{\min}>0$, $\epsilon_k<1$ and $\mathrm{err}_k<f^{\min}_k$ (all asserted). The code also
+multiplies by $J_{\min}/(J_{\min}+\delta)$ with $\delta=\sum_i(\frac{h_i-\ell_i}2)^2|\det\partial_iD_k|$; by
+Lemma~\ref{lem:interp} $\delta=0$, so this factor is $1$.
+
+\emph{T1 form.} Since $Q_k>0$ and $\epsilon<1$, the right-hand side of \eqref{eq:t1} equals
+$\min_{k,k'}Q_k(u)\,(1-\epsilon_{k'}(u))$ with $Q_k=|P|\sum_c\alpha_c\lambda^L_cJ_{c,k}/J_k$. It is bounded below over
+$u\in[-1,1]^6$ by branch and bound: on a sub-box with centre $c$ and radii $r$, each of the $25$ products is bounded below
+by $f(c)-\sum_i|\partial_if(c)|r_i-\frac12\sum_{i,j}\sup_{\rm box}|\partial_{ij}f|\,r_ir_j$ (point jet at the centre,
+interval Hessian over the box); multiaffine pieces have exact ranges from the sub-box corner values. For $\epsilon_k$ and
+$e_k$ the $\lambda_{\max}$ of a positive semidefinite $2\times2$ matrix is replaced by the polynomial majorant
+$\mathrm{tr}/2+(q+s^2)/(2s)$, $q=\mathrm{tr}^2/4-\det$ (AM--GM, $s>0$ fixed per box), or by the trace. Cells C, D and F
+use the Efron--Stein bound only; cell E uses, per sub-box and sector, the smaller of the valid majorants of $\epsilon_k$
+and $e_k$. The accepted leaves form an exact dyadic partition of $[-1,1]^6$ and are part of the certificate.
+
+\section{Corner eigenvalues and the regular pentagon}
+Corner lower bounds use the method of particular solutions: $u=\sum_{j,m}c_{jm}J_{\nu_{jm}}(kr_j)\sin(\nu_{jm}\theta_j)$,
+$\nu_{jm}=m\pi/\alpha_j$, solves $\Delta u+\tilde\lambda u=0$ exactly ($k^2=\tilde\lambda$); by Fox--Henrici--Moler some
+eigenvalue satisfies $|\tilde\lambda-\lambda_n|\le\mu\lambda_n$ with $\mu=|P|^{1/2}\sup_{\partial P}|u|/\|u\|_2$
+\cite{fhm,mp}; $\|u\|_2$ is bounded below through the Helmholtz mean-value identity on an inscribed disk; and, when
+$\mu<1$, $\tilde\lambda|P|/(1-\mu)<2\pi j_{0,1}^2\le\lambda_2|P|$ (Hong--Krahn--Szeg\H{o} \cite{krahn,hong,henrot}) identifies $\lambda_n=\lambda_1$.
+Hence $\lambda_1\ge\tilde\lambda/(1+\mu)$. All $384$ corners have $\mu\le3.1\cdot10^{-4}$. Every corner certificate
+records the vertices, $\tilde\lambda$ (a binary64 number), $\mu$ and the $40$ coefficients, so that a verifier evaluates
+the \emph{same} explicit function. The producer verifier treats the stored enclosures of $\mu$ and of the area as
+certificate data: it re-checks $\mu<1$, the index inequality and $\tilde\lambda/(1+\mu)$ from them, but does not
+recompute the boundary supremum or the disk bound; those are recomputed by the second-party checker for the corners
+listed in Section~\ref{sec:replay}. All corner pentagons are strictly convex (convexity gate), so every $\theta_j$ is
+taken in $[0,\alpha_j]$ with $\alpha_j<\pi$ and the branch cut of $\theta_j$ lies outside $\overline P$. The stored
+binary64 vertex coordinates, $\tilde\lambda$ and coefficients define the trial function exactly; interval arithmetic
+encloses its evaluations, and the final reported lower and upper bounds are rounded outward to binary64.
+
+The regular pentagon is bounded from above in two independent ways:
+(i) the FHM upper bound $\tilde\lambda/(1-\mu)$ at a binary64 regular pentagon $P_t$ whose copy shrunk by the factor
+$1-10^{-12}$ lies inside the exact regular pentagon (checked in ball arithmetic), with domain monotonicity, giving
+$F_*\le 18.919134195733918$; (ii) a conforming $P_2$ finite-element Rayleigh quotient on an inscribed rational
+pentagon with directed-rounding exact integration (second party; source and logs in \texttt{second\_party/p2\_fem}),
+giving $F_*\le 18.919118220170337$. The trial vector of that logged run is not archived, so this value is a
+historical log that cannot be replayed digit for digit from the package; rerunning the two scripts certifies a fresh
+upper bound whose last digits may differ. All margins in this note are computed against the larger value (i),
+$F_*^{\rm up}=18.919134195733918$. Validated eigenvalue bounds on polygons by other means are available in \cite{lo}.
+
+\section{Results}\label{sec:results}
+There are six certificates (A--F) for five distinct boxes (1--5) at three centres. Each box is $C=\prod_i[\ell_i,h_i]$ with the binary64 endpoints listed in its certificate file (centre $\pm\rho$ in every coordinate, sup norm); $x_*$ is the regular pentagon in the chart. ``Margin is the certified lower bound of $F$ on the whole box minus $F_*^{\rm up}=18.919134195733918$. Boxes 1 and 2 share a centre, the cell identified as hardest in the outward-continuation prototype of \cite{liu}, and $1\subset2$; boxes 3 and 4 share a centre at chart distance $0.1$ and $3\subset4$; certificates B and F certify the same box 3 by the two methods; box 5 is centred at the hardest of 480 random centres of our own cost sweep. The nested and repeated certificates are kept as method comparisons.
+
+\begin{center}\small
+\begin{tabular}{lllrrrll}
+\toprule
+cert. & box & form & $\|x_C-x_*\|_2$ & $\rho$ & certified lower bound & margin & B\&B leaves\\
+\midrule
+A & 1 & min-corner & 0.5736 & 0.025 & 18.976746833 & 5.76e-02 & --\\
+B & 3 & min-corner & 0.1003 & 0.012 & 18.920850256 & 1.72e-03 & --\\
+C & 2 & T1 & 0.5736 & 0.03 & 18.919213342 & 7.91e-05 & 1179\\
+D & 4 & T1 & 0.1003 & 0.015 & 18.919134372 & 1.77e-07 & 3368\\
+E & 5 & T1 & 0.5738 & 0.0239 & 18.919156378 & 2.22e-05 & 3335\\
+F & 3 & T1 & 0.1003 & 0.012 & 18.919185215 & 5.10e-05 & 220\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For boxes 4 and 5 the min-corner form fails (its bound is $18.9099$ resp.\ $18.6492$) and only the T1 form certifies the box; box 5 needs the exact covariance majorant $e_k$ in addition to Lemma~\ref{lem:es}.
+
+\section{Cost of a cover (estimate)}\label{sec:cost}
+To estimate the cost of covering a whole region we measured, at 480 centres log-uniformly distributed in chart distance $r\in[0.02,0.6]$ (directions uniform), for which half-widths $\rho$ the rigorous T1 branch and bound succeeds (a search on a grid of ratio $0.85$ up to the largest passing size). In this measurement the corner eigenvalues are floating-point values reduced by a relative margin $2\cdot10^{-5}$ (a strict corner certificate loses about that much), so the numbers below are an \emph{estimate}, not a certificate.
+
+A proof needs only one labelling of each pentagon. We use the Dirichlet domain $D$ of the relabelling action of $D_5$: the points of the chart whose own labelling is (weakly) the closest of their ten labellings to $x_*$. The action is not an isometry of the chart (at $x_*$ the Jacobian of a cyclic relabelling has singular values $2.66,2.66,1,1,0.375,0.375$), so $D$ does not occupy a tenth of a shell around $x_*$; 343 of the 480 centres lie in $D$. The shell $a\le r<b$ has measure $\pi^3r^5\,dr$. Let $\rho(x)=q(x)\,r$ be the half-width chosen at $x$ by the rule below. For $r$ log-uniform on $[a,b)$ and uniform directions
+\[ N_D=\frac{\pi^3}{64}\ln\frac ba\;\mathbb E\bigl[\mathbf 1_D\,q^{-6}\bigr]=\int_{D\cap\{a\le r<b\}}(2\rho(x))^{-6}\,dx, \]
+and the mean over all sampled centres of the band, with those outside $D$ counted as zero, is an unbiased Monte Carlo estimate of this integral. The integral is a continuum proxy for the number of cells, not the number of boxes of a constructed rigorous cover: cells that cross the boundary of $D$, the interfaces of an adaptive grid, overlaps and the certification overhead are not counted. The cost is estimated in the same way, with the integrand multiplied by the cost per cell: 1.5 amortised strict corners (19.5 CPU seconds each, shared between neighbouring grid cells) plus the branch-and-bound time measured at that size. For each centre we use the tested passing size with the smallest cost per volume; smaller sizes were not measured and may be cheaper. Times are CPU seconds on the author's laptop (Intel i9-14900HX, WSL2); the intervals are 95\% bootstrap intervals over the centres of each band.
+
+\begin{center}\small
+\begin{tabular}{lrrrrrr}
+\toprule
+band of $r$ & centres & in $D$ & median $\rho/r$ in $D$ & cells (proxy) & s/cell & CPU-days (95\%)\\
+\midrule
+$[0.02,0.05)$ & 142 & 106 & 0.150 & $3.0\cdot10^{7}$ & 93 & 32521\ (261--92778)\\
+$[0.05,0.20)$ & 209 & 146 & 0.151 & $9.8\cdot10^{4}$ & 323 & 367\ (277--480)\\
+$[0.20,0.60)$ & 129 & 91 & 0.115 & $2.9\cdot10^{6}$ & 114 & 3807\ (998--8975)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For $r\in[0.05,0.6)$ this gives a proxy of about $3.0\cdot10^{6}$ cells and 4174 CPU-days (bootstrap interval 1350--9305). The estimate rests on few shapes: one centre ($r=0.574$, one edge about 3.3 times shorter than the longest) carries 63\% of the band $[0.2,0.6)$, and without it the total would be about 1792 CPU-days. Shrinking every cell to $0.8$ times its largest passing size, with a branch-and-bound time proportional to $\rho^\beta$ ($\beta=11.3$--$14.2$, the interquartile range fitted on pairs of passing sizes by the second party), gives 3885--5025 CPU-days, so a uniform change of the size does not help. Including $[0.02,0.05)$ the estimate is $3.3\cdot10^{7}$ cells and 36694 CPU-days, but that band is dominated by one centre ($r=0.029$, 86\% of the band) and its interval (261--92778) is too wide to be useful. The region $r\ge0.6$ and a neighbourhood $r<0.02$ of the regular pentagon are not included, and a different fundamental domain, or a choice of labelling per region, could be cheaper; this was not measured.
+
+3 of the 480 centres did not pass at any tested size. All of them lie at $r<0.025$ and outside $D$ (their closest labellings are at $r=0.013$--$0.018$), and every failed test failed because the corner values, reduced by the $2\cdot10^{-5}$ margin, were already below $F_*^{\rm up}$. This concerns the tested sizes and the chosen margin, not every possible refinement. Lying outside $D$, these centres contribute zero to the estimate; a centre in $D$ that passed at no tested size would leave the estimate undefined, and the estimator stops in that case. Close to the regular pentagon the accuracy of the corner eigenvalues, not the transplantation bound, limits the method.
+
+\section{Independent second-party replay}\label{sec:replay}
+A second party (GPT, OpenAI) wrote independent checkers that share no source with the producer and never executed the producer code. ``PASS'' means that the independent bound is at least as strong as the one used by the producer certificate. The table separates checks of saved certificate data from independent recomputation.
+
+\begin{center}\small
+\begin{tabular}{p{6.2cm}p{3.2cm}p{5.4cm}}
+\toprule
+item & status & method of the second party\\
+\midrule
+Upper bound $F_*^{\rm up}$ for the regular pentagon & PASS & conforming $P_2$ FEM Rayleigh quotient on an inscribed rational pentagon, exact integration with directed rounding: $F_*\le18.919118220170337$ (source and logs: \texttt{second\_party/p2\_fem}; the trial vector of the logged run is not archived, so the value is a historical log and a rerun certifies a fresh bound)\\
+Convexity gate (all six certificates) & PASS & exact rational corner determinants\\
+B\&B leaves form an exact dyadic partition of $[-1,1]^6$ (C--F); coverage only & PASS (8{,}102 leaves) & exact dyadic tree reconstruction\\
+Internal consistency of the 384 saved corner records ($\mu<1$, index inequality) & PASS & rational re-parsing of all saved balls; a check of saved data, not a recomputation\\
+Min-corner geometry factor, certificates A and B (boxes 1, 3) & PASS 2/2 & exact \texttt{Fraction} recomputation (factor $0.995193\ge0.995121$, $0.999346\ge0.999344$)\\
+Corner eigenvalue lower bounds, certificates A and B (boxes 1, 3) (128 corners) & PASS 128/128 & own interval Bessel series with tail bounds, third-order Taylor boundary bound, disk $L^2$ bound, FHM, Krahn--Szeg\H{o} index, on the exported coefficients; results in \texttt{second\_party/results/}; smallest margin over the producer bound 2.4e-05\\
+Corner eigenvalue lower bounds, worst corner of each of C, D, E & PASS 3/3 & as above\\
+Whole-leaf lower bounds of the T1 form (C--F) & not yet replayed & not done: an independent second-order Taylor implementation reproduces the centre values and gradients of $Q_k$ (220 leaves of F, to $4\cdot10^{-15}$) but does not yet bound whole leaves\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Boxes 1 and 3 (certificates A and B) are fully replayed by the second party: geometry factors (exact fractions), all 128 corner eigenvalue lower bounds and the regular-pentagon upper bound (from a logged run whose trial vector is not archived). Certificates C--F are producer certificates whose whole-leaf bounds have not yet been replayed independently, and should be regarded accordingly.
+
+\section{Limitations}
+The certified boxes are small (side $2\rho\le0.06$) at chart distance $0.1$--$0.57$ from the regular pentagon; no statement is made about the region between them,
+about a neighbourhood of the regular pentagon, about non-convex pentagons, or about the conjecture. Near the regular
+pentagon the gap $F-F_*$ shrinks quadratically and the corner-eigenvalue accuracy, not the transplantation bound,
+limits the cell size. The arithmetic relies on Arb/python-flint \cite{arb} (producer) and on mpmath interval arithmetic
+and Python's \texttt{Fraction}/\texttt{Decimal} (second party); no formal proof assistant was used.
+
+\section{Roles of AI systems}\label{sec:ai}
+Claude (Anthropic) designed the method, wrote and revised the producer algorithms and code, and interpreted the
+resulting logs. GPT (OpenAI) did the literature review and the mathematical audit and wrote the independent
+second-party checkers (Section~\ref{sec:replay}), whose code shares no source with the producer. The code ran as
+local Python processes, in the AI systems' sandboxes and on the author's computer; the author initiated and
+coordinated the runs and decided on the release. The author did not establish the mathematical correctness by hand;
+responsibility for the publication and its correctness lies with the author. Errors, if any, are reported in the
+repository and corrected in later versions.
+
+\section*{Data and code}
+All certificates, producer code, independent checkers, replay commands and a SHA-256 manifest are in the accompanying
+repository (CC BY 4.0 for text and data, MIT for code).
+
+\begin{thebibliography}{99}
+\bibitem{ps} G.~P\'olya, G.~Szeg\H{o}, \emph{Isoperimetric Inequalities in Mathematical Physics}, Princeton, 1951.
+\bibitem{bb-jep} B.~Bogosel, D.~Bucur, On the polygonal Faber--Krahn inequality, \emph{J. \'Ec. polytech. Math.} 11 (2024) 19--105, doi:10.5802/jep.250.
+\bibitem{bb-val} B.~Bogosel, D.~Bucur, Polygonal Faber--Krahn inequality: local minimality via validated computing, arXiv:2406.11575.
+\bibitem{ep} Evidence Press, Certified local minimality of the regular heptagon and octagon, release v1.0.1, doi:10.5281/zenodo.23066520 (2026), not peer reviewed.
+\bibitem{liu} X.~Liu, \texttt{github.com/xfliu/polya-szego-conjecture} (public release, September 2026).
+\bibitem{cghl} Z.~Cheng, C.~Gui, Y.~Hu, Q.~Li, The P\'olya--Szeg\H{o} conjecture for convex polygons with many sides, arXiv:2609.18500 (2026).
+\bibitem{fhm} L.~Fox, P.~Henrici, C.~Moler, Approximations and bounds for eigenvalues of elliptic operators, \emph{SIAM J. Numer. Anal.} 4 (1967) 89--102, doi:10.1137/0704008.
+\bibitem{mp} C.~B.~Moler, L.~E.~Payne, Bounds for eigenvalues and eigenvectors of symmetric operators, \emph{SIAM J. Numer. Anal.} 5 (1968) 64--70, doi:10.1137/0705004.
+\bibitem{krahn} E.~Krahn, \"Uber Minimaleigenschaften der Kugel in drei und mehr Dimensionen, \emph{Acta Comm. Univ. Tartu (Dorpat)} A9 (1926) 1--44.
+\bibitem{hong} I.~Hong, On an inequality concerning the eigenvalue problem of membrane, \emph{K\={o}dai Math. Sem. Rep.} 6 (1954) 113--114.
+\bibitem{henrot} A.~Henrot, \emph{Extremum Problems for Eigenvalues of Elliptic Operators}, Birkh\"auser, 2006, Chapter~4.
+\bibitem{lo} X.~Liu, S.~Oishi, Verified eigenvalue evaluation for the Laplacian over polygonal domains of arbitrary shape, \emph{SIAM J. Numer. Anal.} 51 (2013) 1634--1654, doi:10.1137/120878446.
+\bibitem{es} B.~Efron, C.~Stein, The jackknife estimate of variance, \emph{Ann. Statist.} 9 (1981) 586--596.
+\bibitem{arb} F.~Johansson, Arb: efficient arbitrary-precision midpoint-radius interval arithmetic, \emph{IEEE Trans. Comput.} 66 (2017) 1281--1292, doi:10.1109/TC.2017.2690633.
+\end{thebibliography}
+\end{document}
