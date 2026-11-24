@@ -1,0 +1,340 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{textcomp}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\N}{\mathfrak{N}}
+\newcommand{\s}{\mathfrak{s}}
+\newcommand{\tf}{\mathfrak{t}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\D}{\mathfrak{D}}
+\newcommand{\gr}{\nabla_{\!r}}
+\DeclareMathOperator{\dv}{div}
+\DeclareMathOperator{\curl}{curl}
+\title{An explicit ball of strict minimality of the regular pentagon\\ for $\lambda_1\cdot\mathrm{Area}$\\[4pt]
+\large Computer-assisted proof candidate, not peer reviewed}
+\author{Puyi Sun\thanks{ORCID 0009-0004-1644-5300. See Section~\ref{sec:ai} for the roles of AI systems in this work.}}
+\date{Version 1.1, 23 November 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a planar domain $\Omega$ let $F(\Omega)=\lambda_1(\Omega)\,|\Omega|$, $\lambda_1$ the first Dirichlet eigenvalue of
+the Laplacian. In the chart $z\in\R^6\mapsto P(z)$ = the pentagon with vertices $(0,0),(1,0),(z_1,z_2),(z_3,z_4),
+(z_5,z_6)$, let $c$ be the point of the regular pentagon. We give a computer-assisted proof candidate of
+\[
+F(P(z))>F(P(c))\qquad\text{for all } 0<|z-c|_2<R=\tfrac{52429}{2^{20}}\ (>\tfrac1{20}),
+\]
+and of $18.9191028942<F(P(c))<18.9191047951$. Local minimality of the regular pentagon is known
+\cite{bb-jep,bb-val}, and an explicit neighbourhood in other coordinates is given in \cite{liu}; the point here is an
+explicit radius in the Euclidean norm of this chart, with a certificate in exact rational arithmetic. The method is the one-vector Lehmann--Goerisch lower bound applied to a trial family that
+contains the \emph{true} first eigenfunction of the regular pentagon (known only up to an error with a proved $H^1$
+bound) and first-order corrections; the bound is then exact at $c$, its gradient vanishes by symmetry, and what
+remains is the positivity of a polynomial whose coefficients are enclosed. The first-order terms of the unknown error
+are paired with small residual fields, and the quadratic error term is bounded separately. The computation takes a few minutes; a certificate with all numbers of the final
+positivity proof is provided together with a checker that uses the Python standard library only.
+\end{abstract}
+
+\section{Background and statement}
+P\'olya and Szeg\H{o} proved that the equilateral triangle and the square minimise $F$ among triangles and
+quadrilaterals and conjectured the same for $n$-gons with $n\ge5$ \cite{ps}. Bogosel and Bucur reduced the case of
+fixed $n$ to a finite computation \cite{bb-jep} and proved, with all computations in interval arithmetic, that the
+regular pentagon and hexagon are local minimisers \cite{bb-val}; we did not find an explicit size of the
+neighbourhood there. A public repository maintained under the GitHub account
+\texttt{xfliu} \cite{liu} contains a computer-assisted proof that the regular pentagon is a strict local minimiser
+along every transversal direction $v$ for parameters $0<t\le 1/6250$ (in the parametrisation $P_5+tv$ used there),
+that is, an explicit neighbourhood in other coordinates, based on the one-vector Lehmann--Goerisch bound with Raviart--Thomas fluxes. The conjecture is known for convex
+polygons with sufficiently many sides \cite{cghl}, and its local version for the torsional rigidity for all $n\ge5$
+\cite{bbf}. A recent preprint of H.~Wang \cite{wang} claims a proof that for every $n\ge5$ the regular $n$-gon
+minimises $\lambda_1$ among simple polygons with at most $n$ sides and the same area, which contains the pentagon case;
+it has not been peer reviewed, and we have not checked it. Theorem~\ref{thm:L} does not depend on it.
+
+\begin{theorem}\label{thm:L}
+Let $c$ be the chart point of the regular pentagon and $F_0=F(P(c))$. For every $z\in\R^6$ with
+$0<|z-c|_2<R=52429/2^{20}$ the polygon $P(z)$ is a simple pentagon and $F(P(z))>F_0$. Moreover
+$18.9191028942<F_0<18.9191047951$.
+\end{theorem}
+The norm is the Euclidean norm of the fixed-first-edge chart; the explicit neighbourhood of \cite{liu} is expressed
+in different coordinates, and we do not compare the maximal neighbourhoods of the two methods. Every pentagon whose shape is within chart distance $R$ of the regular
+one for \emph{some} labelling of its vertices is covered, because $F$ is invariant under similarities and relabellings.
+Our contribution is the explicit radius in this chart, the particular residual identity of Section~\ref{sec:family}
+for the trial family that is exact at the centre, and a rational coefficient-enclosure certificate whose final
+positivity proof can be independently checked. We make no priority claim, and no claim about pentagons outside the
+ball. This note is a summary: the complete majorants of Section~7 and the side conditions are written out in the
+files \texttt{proof/LOCAL\_LEMMA.md} and \texttt{proof/LOCAL\_CERT.md} that accompany it, and the fan flux
+construction of Section~3 in \texttt{proof/LG\_LEMMA.md}.
+
+\section{The lower bound}
+\begin{lemma}[one-vector Lehmann--Goerisch bound]\label{lem:LG}
+Let $\Omega\subset\R^2$ be a bounded domain with Dirichlet eigenvalues $0<\lambda_1\le\lambda_2\le\dots$, and
+$\nu\le\lambda_2$. Let $u\in H^1_0(\Omega)$, $u\ne0$, and $w\in H(\dv;\Omega)$ with $-\dv w=u$, and
+$A_0=\|\nabla u\|^2$, $A_1=\|u\|^2$, $A_2=\|w\|^2$. If $A_0<\nu A_1$, then $\nu A_2-A_1>0$ and
+\[
+\lambda_1\ \ge\ \frac{\nu A_1-A_0}{\nu A_2-A_1}.
+\]
+\end{lemma}
+\begin{proof}
+Let $\psi\in H^1_0$ solve $-\Delta\psi=u$. For $f\in H^1_0$: $\int\nabla f\cdot w=\int fu=\int\nabla f\cdot\nabla\psi$,
+so $w-\nabla\psi\perp\nabla H^1_0$ and $A_2\ge\|\nabla\psi\|^2=:B_2$. With $u=\sum c_k\varphi_k$ in an orthonormal
+eigenbasis and $p_k=c_k^2$: $A_1=\sum p_k$, $A_0=\sum\lambda_kp_k$, $B_2=\sum p_k/\lambda_k$. Put $D=A_0-\nu A_1=
+\sum p_k(\lambda_k-\nu)<0$ and $G_0=A_0-2\nu A_1+\nu^2B_2=\sum p_k(\lambda_k-\nu)^2/\lambda_k$. Then $\lambda_1<\nu$, and
+since $\lambda_k\ge\nu$ for $k\ge2$: $-D\le p_1(\nu-\lambda_1)$ and $\lambda_1G_0\ge p_1(\nu-\lambda_1)^2\ge
+(-D)(\nu-\lambda_1)$, i.e.\ $\lambda_1(G_0-D)\ge\nu(-D)$ with $G_0-D\ge-D>0$. Finally $G:=A_0-2\nu A_1+\nu^2A_2\ge G_0$,
+$t\mapsto\nu(-D)/(t-D)$ is decreasing, and $\nu(-D)/(G-D)=(\nu A_1-A_0)/(\nu A_2-A_1)$.
+\end{proof}
+This is the case of one trial vector of the method of Lehmann and Goerisch \cite{lehmann,gh,bg}. For $u=\varphi_1$,
+$w=\nabla\varphi_1/\lambda_1$ the bound equals $\lambda_1$. We use $\nu=\kappa_0/|\Omega|$ with
+$\kappa_0=36.33682907<2\pi j_{0,1}^2$, admissible by the Krahn--Szeg\H{o} inequality
+$\lambda_2(\Omega)|\Omega|\ge2\pi j_{0,1}^2$ \cite{krahn,hong}.
+
+\section{Reference coordinates and the fan flux}
+Fix a rational point $O$ near the centre of $P(c)$. For $z$ in the cube $\{|z-c|_\infty\le W\}$, $W=13/256$, the fan
+triangles $T_k(z)=(O,V_k(z),V_{k+1}(z))$, $k=0,\dots,4$, have $\det\nolimits_k(z)=e_1\times e_2>0$
+($e_1=V_k-O$, $e_2=V_{k+1}-O$; proved on the whole cube, Section~\ref{sec:side}); since the cube is connected and
+contains $c$, the triangles tile $P(z)$. On $T_k$ write $p=O+ae_1+be_2$ with $(a,b)$ in the reference triangle
+$a,b\ge0$, $a+b\le1$; functions on $P(z)$ are functions of $(k,a,b)$, and $\gr=(\partial_a,\partial_b)$. With
+$n_{11}=|e_1|^2$, $n_{12}=e_1\cdot e_2$, $n_{22}=|e_2|^2$, $\det=\det_k$ put
+\[
+\M_z=\frac1{\det}\begin{pmatrix}n_{22}&-n_{12}\\-n_{12}&n_{11}\end{pmatrix},\qquad
+\N_z=\M_z^{-1}=\frac1{\det}\begin{pmatrix}n_{11}&n_{12}\\n_{12}&n_{22}\end{pmatrix},
+\]
+\[
+b_z(v,v')=\sum_k\det\nolimits_k\!\int vv'\ \Big(=\int_{P(z)}vv'\Big),\qquad
+a_z(v,v')=\sum_k\int\gr v\cdot\M_z\gr v'\ \Big(=\int_{P(z)}\nabla v\cdot\nabla v'\Big),
+\]
+all integrals over the reference triangle. A vector field $w$ on $P(z)$ is represented by $\s=\det\cdot$(its
+components in the basis $e_1,e_2$); then $\int_{P(z)}w\cdot w'=c_z(\s,\s'):=\sum_k\int\s\cdot\N_z\s'$,
+$\nabla v$ corresponds to $\s=\M_z\gr v$, and $\int_{P(z)}w\cdot\nabla f=\sum_k\int\s\cdot\gr f$.
+
+\emph{Fan flux.} For $v$ continuous and piecewise smooth and $\chi$ continuous let $h=(2+E)^{-1}v$, $E=a\partial_a+
+b\partial_b$, i.e.\ $h(s,\theta)=s^{-2}\int_0^st\,v(t,\theta)\,dt$ along the rays from $O$, and
+\[
+\s_z(v,\chi)=\big(-\det\nolimits_k\,a\,h+\partial_b\chi,\ -\det\nolimits_k\,b\,h-\partial_a\chi\big)
+\quad\longleftrightarrow\quad w=-(p-O)\,h+\curl\chi .
+\]
+Then $-\dv w=(2+E)h=v$ in every triangle; across the spokes the normal component of $(p-O)h$ vanishes and that of
+$\curl\chi$ is the tangential derivative of the continuous $\chi$. Hence $w\in H(\dv;P(z))$, $-\dv w=v$, and for
+$f\in H^1_0$
+\begin{equation}\label{eq:IP}
+\sum_k\int\s_z(v,\chi)\cdot\gr f=b_z(v,f).
+\end{equation}
+
+\section{The family: exact at the regular pentagon}\label{sec:family}
+Let $u_0$ be a first eigenfunction of $P(c)$, $\lambda_0=\lambda_1(P(c))$, $h_0=(2+E)^{-1}u_0$, and $\chi_0\in H^1$
+with $\curl\chi_0=\nabla u_0/\lambda_0+(p-O)h_0$ on $P(c)$ (the right side is a divergence-free $L^2$ field on a
+simply connected Lipschitz domain); equivalently $\s_c(u_0,\chi_0)=\M_c\gr u_0/\lambda_0$. Let $U_1,\dots,U_6$ be
+continuous piecewise polynomials on the fan vanishing on the boundary, and $X_1,\dots,X_6$ continuous piecewise
+polynomials. With $d=z-c$,
+\[
+v_z=u_0+\sum_id_iU_i,\qquad\chi_z=\chi_0+\sum_id_iX_i,\qquad\s_z=\s_z(v_z,\chi_z).
+\]
+Transplanted to $P(z)$, $(v_z,\s_z)$ is admissible in Lemma~\ref{lem:LG}. Let $|P|=|P(z)|$, $F_0=\lambda_0|P(c)|$,
+\begin{align*}
+\B_z\big((v,\s),(v',\s')\big)&=|P|(\kappa_0+F_0)\,b_z(v,v')-|P|^2a_z(v,v')-F_0\kappa_0\,c_z(\s,\s'),\\
+\Psi(z)&=\B_z\big((v_z,\s_z),(v_z,\s_z)\big).
+\end{align*}
+If $\kappa_0b_z(v_z,v_z)>|P|a_z(v_z,v_z)$, Lemma~\ref{lem:LG} with $\nu=\kappa_0/|P|$ gives
+\begin{equation}\label{eq:main}
+F(P(z))-F_0\ \ge\ \frac{\Psi(z)}{\kappa_0c_z(\s_z,\s_z)-|P|\,b_z(v_z,v_z)},\qquad\text{denominator}>0 .
+\end{equation}
+At $z=c$: $a_c=\lambda_0b_c$ and $c_c(\s_c,\s_c)=b_c/\lambda_0$, so $\Psi(c)=b_c\,[\,|P|(\kappa_0+F_0)-|P|^2\lambda_0-
+F_0\kappa_0/\lambda_0]=0$.
+
+\begin{lemma}\label{lem:S}
+$\nabla\Psi(c)=0$.
+\end{lemma}
+\begin{proof}
+Let $L(z)=F_0+\Psi(z)/(\kappa_0c_z(\s_z,\s_z)-|P|b_z(v_z,v_z))$ and $U(z)=|P(z)|\,a_z(u_0,u_0)/b_z(u_0,u_0)$, the Rayleigh
+quotient of the transplanted $u_0$. Both are rational functions of $z$ with fixed integrals as coefficients, smooth
+near $c$, and $L\le F\le U$ near $c$ by \eqref{eq:main} and Rayleigh's principle, with $L(c)=U(c)=F_0$ (the hypothesis
+of \eqref{eq:main} holds at $c$ because $\kappa_0>F_0$, hence in a neighbourhood). Let
+$\varphi_g$, $g\in D_5$, be the ten relabelling maps of the chart: they are smooth near $c$, $\varphi_g(c)=c$ and
+$F\circ\varphi_g=F$. Hence $L\le F\circ\varphi_g\le U\circ\varphi_g$ for every $g$, and averaging,
+$L(z)-F_0\le\nabla U(c)\,M\,(z-c)+O(|z-c|^2)$ with $M=\frac1{10}\sum_gD\varphi_g(c)$. The matrices $D\varphi_g(c)$ form a
+representation of $D_5$ and $M$ is the projection onto its fixed vectors; a computation in ball arithmetic gives
+$\|M\|_\infty<10^{-100}<1$, hence $M=0$. (Alternatively: the tangent representation is $\rho_1\oplus2\rho_2$, without
+trivial component.) So $\nabla L(c)\cdot(z-c)\le O(|z-c|^2)$ for all $z$, i.e.\ $\nabla L(c)=0$, and
+$\nabla\Psi(c)=(\text{denominator at }c)\,\nabla L(c)=0$.
+\end{proof}
+No differentiability of $F$ is used. Consequently
+\[
+Q(d):=\Big(\prod_k\det\nolimits_k(c+d)\Big)\,\Psi(c+d)
+\]
+is a polynomial in $d$ \emph{without constant and linear terms}, and by \eqref{eq:main} Theorem~\ref{thm:L} follows
+from: (i) $\det_k>0$; (ii) $\kappa_0b_z(v_z,v_z)>|P|a_z(v_z,v_z)$; (iii) $Q(d)>0$; for $0<|d|_2<R$.
+
+\section{The residual form}
+Let $\tilde u_0,\tilde\chi_0$ be computed piecewise polynomial approximations of $u_0,\chi_0$,
+$\tilde v_z=\tilde u_0+\sum d_iU_i$, $\tilde\chi_z=\tilde\chi_0+\sum d_iX_i$, $\tilde\s_z=\s_z(\tilde v_z,\tilde\chi_z)$,
+$\tilde\Psi(z)=\B_z$ of the computed pair with itself. Let $e=\tilde u_0-u_0\in H^1_0$, $e_h=(2+E)^{-1}e$,
+$\hat\lambda(z)=F_0/|P(z)|$ and
+\[
+\rho_z=\N_z\tilde\s_z-\gr\tilde v_z/\hat\lambda(z)
+\]
+(the pull-back of $w-\nabla u/\hat\lambda$ for the computed pair; $\rho_c$ is the residual at $c$).
+\begin{proposition}\label{prop:R}
+$\displaystyle\Psi(z)=K(z)+\sum_k\int\gr e\cdot\Lambda_z+\sum_k\int e_h\,(a,b)\cdot\Theta_z+q_z(e,e)$, where
+\begin{align*}
+K&=\tilde\Psi+2F_0\kappa_0\sum_k\!\int\rho_z\cdot\M_c\rho_c-F_0\kappa_0\sum_k\!\int(\M_c\rho_c)\cdot\N_z(\M_c\rho_c),\\
+\Lambda_z&=2F_0\big[(\kappa_0/\lambda_0)\,\M_c\rho_z-|P(z)|\,\M_z\rho_z-(\kappa_0/\lambda_0)\,\M_c\N_z\M_c\rho_c\big],\\
+\Theta_z&=-2F_0\kappa_0\,(\det\nolimits_k(z)-\det\nolimits_k(c))\,\big[\rho_z-\N_z\M_c\rho_c\big],\\
+q_z(e,e)&=|P|(\kappa_0+F_0)\,b_z(e,e)-|P|^2a_z(e,e)-F_0\kappa_0\,c_z(\tf',\tf'),\\
+\tf'&=\M_c\gr e/\lambda_0-(\det\nolimits_k(z)-\det\nolimits_k(c))\,(a,b)\,e_h .
+\end{align*}
+\end{proposition}
+\begin{proof}
+The true pair is the computed pair minus $(e,\tf_z)$, $\tf_z=\tilde\s_z-\s_z=\s_z(e,e_\chi)$ with
+$e_\chi=\tilde\chi_0-\chi_0$ (the terms with $U_i,X_i$ cancel). At $c$: $\tf_c=\tilde\s_c-\M_c\gr u_0/\lambda_0=
+\M_c(\rho_c+\gr e/\lambda_0)$, and $\tf_z=\tf_c-(\det_k(z)-\det_k(c))(a,b)e_h$. Thus
+$\Psi=\tilde\Psi-2\B_z((\tilde v,\tilde\s),(e,\tf_z))+\B_z((e,\tf_z),(e,\tf_z))$. By the definition of $\rho_z$,
+$c_z(\tilde\s,\tf_z)=\sum\!\int\rho_z\cdot\tf_z+\hat\lambda^{-1}\sum\!\int\gr\tilde v\cdot\tf_z$, and
+$\sum\!\int\gr\tilde v\cdot\tf_z=b_z(\tilde v,e)$ by \eqref{eq:IP} for the pair $(e,e_\chi)$. Also
+$\gr\tilde v=\hat\lambda(\N_z\tilde\s-\rho_z)$, so $a_z(\tilde v,e)=\hat\lambda\sum\!\int\tilde\s\cdot\gr e-
+\hat\lambda\sum\!\int\rho_z\cdot\M_z\gr e=\hat\lambda b_z(\tilde v,e)-\hat\lambda\sum\!\int\rho_z\cdot\M_z\gr e$ by
+\eqref{eq:IP} for the computed pair. With $|P|^2\hat\lambda=|P|F_0$ and $F_0\kappa_0/\hat\lambda=\kappa_0|P|$ the four
+terms with $b_z(\tilde v,e)$ cancel:
+\[
+\B_z\big((\tilde v,\tilde\s),(e,\tf_z)\big)=F_0|P|\sum_k\!\int\rho_z\cdot\M_z\gr e-F_0\kappa_0\sum_k\!\int\rho_z\cdot\tf_z .
+\]
+Insert $\tf_z=\M_c\rho_c+\tf'$, expand $c_z(\tf_z,\tf_z)$, and collect the terms without $e$, linear and quadratic in $e$.
+\end{proof}
+The point of the proposition: a term-by-term estimate of the error of $\Psi$ is useless (the individual terms are of
+size $(\kappa_0+F_0)|P|A_1$ and the smallest eigenvalue of the quadratic form to be protected is $0.52$ in units of
+$F$), whereas here $e$ is paired only with fields built from $\rho$, which are small.
+
+\section{Bounds for the unknown function}
+Normalise $u_0$ as the $L^2(P(c))$ projection of $\tilde u_0$ on the first eigenspace. Then $e\perp u_0$,
+$\|\nabla e\|^2-\lambda_0\|e\|^2=A_0-\lambda_0A_1$ ($A_i$: the forms of the computed pair at $c$) and
+$\|\nabla e\|^2\ge\lambda_2\|e\|^2\ge\nu\|e\|^2$, so with $\lambda_{lo}\le\lambda_0\le\lambda_{up}=A_0/A_1$
+($\lambda_{lo}$ from Lemma~\ref{lem:LG} at $c$)
+\[
+\varepsilon_1^2:=\|\nabla e\|^2_{L^2(P(c))}\le\frac{A_0-\lambda_{lo}A_1}{1-\lambda_{up}/\nu},\qquad
+\varepsilon_0^2:=\|e\|^2\le\varepsilon_1^2/\nu .
+\]
+On every reference triangle $\int(a+b)^2e_h^2\le\frac14\int e^2$ (in the coordinates $s=a+b$, $\theta=a/s$:
+$da\,db=s\,ds\,d\theta$, $e_h=s^{-2}\int_0^st\,e\,dt$, Cauchy--Schwarz). With degree $16$:
+$\varepsilon_1\le1.02\cdot10^{-3}$ ($4.6\cdot10^{-4}$ of $\|\nabla\tilde u_0\|$), $\varepsilon_0\le2.3\cdot10^{-4}$.
+
+\section{Enclosure of the coefficients}
+Everything is multiplied by $\D(z)=\prod_k\det_k(z)$ and expanded in $d'=z-C_q$, $C_q$ a rational point with
+$|c-C_q|_\infty\le2^{-50}$. Polynomial arithmetic is exact (FLINT \cite{flint}); quantities that are irrational or not
+known exactly are carried as polynomials with a coefficientwise radius: $F_0$ and $\lambda_0$ (with rigorous interval enclosures recorded in \texttt{constants.json}; the enclosure of $F_0$
+has width about $1.9\cdot10^{-6}$), the
+geometry of $P(c)$, the weights $d'_i-(c-C_q)_i$ of the lists, and $\rho_c$. The coefficient fields of $\D\Lambda_z$
+and $\D\Theta_z$ lie in the span of the $6\cdot7$ functions $a\,h_b,\ b\,h_b,\ \partial_a\chi_b,\ \partial_b\chi_b,\
+\partial_aU_b,\ \partial_bU_b$ ($b=0,\dots,6$) per triangle, whose Gram matrices are exact rationals. For the
+coefficient of $d'^\alpha$,
+\[
+\Big|\sum_k\!\int\gr e\cdot\Lambda_\alpha+\sum_k\!\int e_h(a,b)\cdot\Theta_\alpha\Big|\le
+\varepsilon_1\Big(\sum_k\!\int\Lambda_\alpha\cdot\N_c\Lambda_\alpha\Big)^{1/2}+
+\frac{\varepsilon_0}2\Big(\sum_k\!\int\frac{|\Theta_\alpha|^2}{\det_k(c)}\Big)^{1/2},
+\]
+computed exactly for $|\alpha|\le3$ and replaced by a cruder majorant for higher degrees; $q_z(e,e)$ is bounded by a
+majorant with $\varepsilon_0^2,\varepsilon_1^2$; the Taylor shift from $C_q$ to $c$ changes a coefficient by at most
+$(2^{-50}/2^{-10})\,[B(d+2^{-10}\mathbf 1)-B(d)]_\alpha$ for any coefficientwise majorant $B$. The result is
+$Q(d)=\sum_{|\alpha|\ge2}s_\alpha d^\alpha$ with $s_\alpha\in[T_\alpha-E_\alpha,T_\alpha+E_\alpha]$, $T_\alpha,E_\alpha$
+rational ($12{,}968$ and $13{,}024$ numbers). The computed coefficients of degree $0$ and $1$ are discarded: the true ones
+vanish by Section~\ref{sec:family}. (They lie within their error bounds, as they must.)
+
+\section{Positivity}
+\emph{Inner cube $|d_i|\le\rho=1/128$.} Write $Q(d)=d^T[\frac12H+\sum_id_iT_i]d+\text{rest}$ with $H$, $T$ from
+$T_\alpha$, $|\alpha|=2,3$, and $|\text{rest}|\le\tau|d|^2$, $\tau=\tau_2+\tau_3+\tau_4$:
+$\tau_2=\max_i[E_{2e_i}+\frac12\sum_{j\ne i}E_{e_i+e_j}]$, $\tau_3=\rho\sum_{|\alpha|=3}E_\alpha w_\alpha$,
+$\tau_4=\sum_{|\alpha|\ge4}\rho^{|\alpha|-2}(|T_\alpha|+E_\alpha)w_\alpha$ ($w_\alpha=1$ for pure powers, $\frac12$
+otherwise). The matrix $\frac12H+\sum d_iT_i-\tau I$ is affine in $d$, so it is positive definite on the cube if it is
+at the $64$ vertices (exact $LDL^T$). In units of $F$ (that is, $Q$ divided by its normalising factor
+$\D(c)\,(\kappa_0c_c(\s_c,\s_c)-|P(c)|\,b_c(v_c,v_c))\approx0.109$; the certificate stores $Q$ itself): the eigenvalues
+of $H$ are $0.525,\,0.557,\,5.03,\,5.70,\,12.76,\,15.31$; $\tau=0.165$ ($0.057+0.013+0.095$); the smallest pivot is
+$0.32$ (in the units of the certificate: $\tau=0.01806$, smallest pivot $0.03492$).
+
+\emph{Shell.} The half cube $\{|d_i|\le W,\ d_3\ge0\}$ is bisected into $7{,}939$ boxes $m\pm r$: $32$ inside the
+inner cube, $965$ with $\sum_i\max(|m_i|-r_i,0)^2\ge R^2$, and $6{,}942$ on which
+$p(x)=\sum_{2\le|\alpha|\le6}T_\alpha(m+x)^\alpha$ satisfies $\min_{|x_i|\le r_i}p>\sum_\alpha E'_\alpha\prod_i
+(|m_i|+r_i)^{\alpha_i}$ ($E'=E$ plus $|T_\alpha|$ for $|\alpha|>6$), proved by: constant term, exact Lagrangian bound of
+the linear and quadratic terms ($-\frac12g^TA^{-1}g-\sum\mu_ir_i^2$ with multipliers $\mu_i\ge0$ and $A=H_p+2\,\mathrm{diag}(\mu)$ positive
+definite; both are checked),
+and the sum of the absolute values of the higher terms. All of this is exact rational arithmetic. The other half
+follows from the reflection $(z_1,\dots,z_6)\mapsto(1-z_5,z_6,1-z_3,z_4,1-z_1,z_2)$, an isometry of the chart that fixes
+$c$ and preserves $F$.
+
+\section{Side conditions}\label{sec:side}
+On the cube of half-width $W$: $\det_k>0$ by an exact polynomial test; and
+$\kappa_0b_z(v)-|P|a_z(v)\ge(\kappa_0b_z(\tilde v)-|P|a_z(\tilde v))-2\kappa_0(b_z(\tilde v)b_z(e))^{1/2}-
+|P|(2(a_z(\tilde v)a_z(e))^{1/2}+a_z(e))$ with $b_z(e)\le2\varepsilon_0^2$, $a_z(e)\le2\varepsilon_1^2$
+($\det_k(z)\le2\det_k(c)$, $\M_z\preceq2\M_c$ on the cube), which is proved positive on the whole cube by an exact polynomial test (the allowance is less than $0.032$; at the
+centre the main term is about $7.776$).
+
+\section{Computation and verification}
+The computed functions are continuous piecewise polynomials of degree $16$ (flux potential $17$) on the fan in
+Bernstein form with integer coefficients; $U_i,X_i$ are difference quotients of the Ritz data. The producer run took
+$383$\,s (about $6$ minutes) on one core of the machine used; checking its output takes another $16$ minutes, and
+timings vary between machines. The certificate consists of $T_\alpha,E_\alpha$, the list of all $7{,}939$ boxes with the
+multipliers $\mu$, and the inputs and intermediate numbers of the enclosure. A checker written with the Python
+standard library only, sharing no code with the producer, re-proves the inner cube, the exact tiling and the positivity
+on all boxes from $T_\alpha,E_\alpha$ ($936$\,s on the same machine). The run was repeated on a second computer with a byte-identical
+list of boxes.
+
+Tests on the producer side: the identity of Proposition~\ref{prop:R} with an arbitrary polynomial in the place of $e$
+(then an explicit defect term appears; agreement $2\cdot10^{-13}$); equality of the computed polynomial fields with
+the formulas of the proposition in exact rational arithmetic; the dual-norm bound against an explicit test function;
+and at $72$ points of the ball the certified lower bound of $F(z)-F_0$ is between $0.50$ and $0.99$ of the
+difference computed independently, never above it.
+
+\section{Second-party review}\label{sec:replay}
+\emph{(Status on 22 November 2026.)} The reviewer (GPT, an AI system) worked with separately written programs and,
+in the rounds below, did not run or import any producer program. In PENT-21, it re-derived the analytical identities
+(Lemma~\ref{lem:S}, the admissibility of the family, Proposition~\ref{prop:R}, the inequalities of Section~6) and
+tested them independently. Its finite-element Hessian (eigenvalues $0.527,\,0.557,\,5.03,\,5.70,\,12.76,\,15.31$ on the
+finest mesh) and its search over $1{,}022$ points of the ball (smallest observed finite-element quotient
+$(F_h-F_{h,0})/|z-c|^2\approx0.2529$) were non-rigorous numerical diagnostics, not certified inequalities for the exact
+eigenvalue. It requested the certificate data and the removal of a floating-point step from the positivity test; both
+were done. PENT-21b replayed Level~A (Section~8) in full in exact arithmetic, including the $64$ vertex matrices, the
+tiling by $7{,}939$ boxes, the $32$ inner and $965$ outer boxes, and all $6{,}942$ positivity boxes, with three
+negative controls rejected. It also performed Level~B spot checks, including $135$ exact Gram and mass entries and
+numerical checks of the $21$ degree-two coefficients. In PENT-21c the reviewer independently constructed valid
+enclosures for all $13{,}024$ coefficients and audited the support and the one-sided bounds used by the proof. The two
+sets of intervals intersect in all $13{,}024$ entries; the independently computed intervals are contained in the
+archived intervals in $7{,}086$ entries, so the inclusion route does not pass. Instead, the reviewer re-proved Level~A
+with its own enclosure (route (ii)), including all $6{,}942$ positivity boxes and all $64$ vertex matrices. The ratios of
+the error radii are approximately $0.49$--$1.05$ (outward-rounded bounds $0.4905$--$1.0507$). In certificate units the
+archived and independent values of $\tau$ are approximately $0.0180572461$ and $0.0175600042$, with smallest pivots
+$0.0349222788$ and $0.0365931194$, respectively. The producer also replayed the reviewer's enclosure with the standalone
+rational checker on 21 November 2026. A stored diagnostic interval for $\varepsilon_0^2$, not used by the proof, misses
+the independent interval by about $3.2\cdot10^{-119}$; the one-sided upper bound actually used passes. This is a
+second-party AI-assisted computational review of the stated local result, not peer review.
+
+\section{Limitations}
+The statement concerns the ball only. Both levels of the certificate have been recomputed with independently written
+programs, but the review is not a peer review.
+We do not compare our radius with the neighbourhood of \cite{liu}, which is expressed in different coordinates.
+
+\section{Roles of AI systems}\label{sec:ai}
+Claude (Anthropic) found the method, wrote the proofs, the producer code and the checker, and ran the computations.
+GPT (OpenAI) reviewed the mathematics and wrote independent programs for the second-party checks of
+Section~\ref{sec:replay}. The author initiated and coordinated the work, ran the computation on his own computer and
+decides on the release. The author did not establish the mathematical correctness by hand; responsibility for the
+publication lies with the author.
+
+\begin{thebibliography}{99}
+\bibitem{ps} G.~P\'olya, G.~Szeg\H{o}, \emph{Isoperimetric Inequalities in Mathematical Physics}, Princeton, 1951.
+\bibitem{bb-jep} B.~Bogosel, D.~Bucur, On the polygonal Faber--Krahn inequality, \emph{J. \'Ec. polytech. Math.} 11 (2024) 19--105, doi:10.5802/jep.250.
+\bibitem{bb-val} B.~Bogosel, D.~Bucur, Polygonal Faber--Krahn inequality: local minimality via validated computing, arXiv:2406.11575.
+\bibitem{wang} H.~Wang, The P\'olya--Szeg\H{o} inequalities for polygons, arXiv:2611.22305 (17 November 2026).
+\bibitem{liu} Public repository \texttt{github.com/xfliu/polya-szego-conjecture}, maintained under the GitHub account \texttt{xfliu}; read at commit \texttt{bf7c9c288f56691745f6bcdf31c1128eaa937a93} (September 2026).
+\bibitem{cghl} Z.~Cheng, C.~Gui, Y.~Hu, Q.~Li, The P\'olya--Szeg\H{o} conjecture for convex polygons with many sides, arXiv:2609.18500 (2026).
+\bibitem{bbf} B.~Bogosel, D.~Bucur, I.~Fragal\`a, Proof of the local version of the P\'olya--Szeg\H{o} conjecture for the torsional rigidity of polygons, arXiv:2609.23051 (2026).
+\bibitem{lehmann} N.~J.~Lehmann, Beitr\"age zur numerischen L\"osung linearer Eigenwertprobleme I, II, \emph{Z. Angew. Math. Mech.} 29 (1949) 341--356; 30 (1950) 1--16.
+\bibitem{gh} F.~Goerisch, H.~Haunhorst, Eigenwertschranken f\"ur Eigenwertaufgaben mit partiellen Differentialgleichungen, \emph{Z. Angew. Math. Mech.} 65 (1985) 129--135.
+\bibitem{bg} H.~Behnke, F.~Goerisch, Inclusions for eigenvalues of selfadjoint problems, in: \emph{Topics in Validated Computations} (Oldenburg, 1993), Stud. Comput. Math. 5, North-Holland, 1994, 277--322.
+\bibitem{krahn} E.~Krahn, \"Uber Minimaleigenschaften der Kugel in drei und mehr Dimensionen, \emph{Acta Comm. Univ. Tartu (Dorpat)} A9 (1926) 1--44.
+\bibitem{hong} I.~Hong, On an inequality concerning the eigenvalue problem of membrane, \emph{K\={o}dai Math. Sem. Rep.} 6 (1954) 113--114.
+\bibitem{flint} The FLINT team, \emph{FLINT: Fast Library for Number Theory}, version 3, \texttt{flintlib.org}; F.~Johansson, Arb: efficient arbitrary-precision midpoint-radius interval arithmetic, \emph{IEEE Trans. Comput.} 66 (2017) 1281--1292.
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,43 @@
+{
+ "status": "computer-assisted proof candidate, not peer reviewed",
+ "version": "1.1",
+ "date": "2026-11-22",
+ "theorem": "Theorem L: F(P(z)) > F(P(c)) for 0 < |z - c|_2 < 52429/2^20",
+ "producer": {
+  "program": "producer/lglocal.py",
+  "runs": [
+   "sandbox 2026-11-17 (certificate in certificate/)",
+   "author's computer 2026-11-17 (same list of boxes)"
+  ]
+ },
+ "producer_side_checks": {
+  "level_A_standalone_checker": "checker/lglocal_cert_check.py, all 6,942 P boxes, CERTIFICATE OK, smallest margin 4.1e-9 (certificate/cert_check_standalone.log)",
+  "identities_and_bounds": "producer/tests/lglocal_check.py PASS; producer/tests/lglocal_exact.py PASS (the polynomial fields equal the formulas of Proposition R in exact arithmetic)"
+ },
+ "second_party": {
+  "reviewer": "GPT (OpenAI), an AI system; programs written separately from the producer (rounds PENT-21, 21b, 21c: no producer program run or imported). This is a second-party AI-assisted computational review, not peer review",
+  "passed": [
+   "Lemma S (vanishing gradient), admissibility of the family, Proposition R (re-derived, tested by independent quadrature), the inequalities for the unknown function, the logic of the positivity proof",
+   "non-rigorous numerical diagnostic (PENT-21): independent finite-element Hessian of the discrete F_h at the regular pentagon, eigenvalues 0.52698, 0.55711, 5.03271, 5.70049, 12.75786, 15.31220 (producer: 0.525, 0.557, 5.03, 5.70, 12.76, 15.31); not a certified inequality",
+   "non-rigorous numerical diagnostic (PENT-21): finite-element falsification search at 1,022 points of the ball, none with F_h below F_h(regular) (smallest quotient (F_h - F_h0)/|z - c|^2 approximately 0.2529); not a certified inequality",
+   "Lemma LG and the fan flux; 240 of 240 single-polygon certificates re-proved in exact arithmetic with own code",
+   "level A of the certificate, replayed in full with own programs in exact arithmetic (PENT-21b): tau and the 64 vertex matrices (smallest pivot 0.0349222788..., equal to inner.json), the tiling by 7,939 boxes, the 32 inner and 965 outer boxes, all 6,942 P boxes (own C++/GMP checker, 21.7 s), three tampering tests rejected",
+   "level B spot checks (PENT-21b): 100 Gram entries and 35 mass entries equal in exact arithmetic; A0, A1, A2, lambda_lo, lambda_up, nu, eps1^2, eps0^2 consistent (own intervals intersect the archived ones); the 21 coefficients of degree 2 recomputed from Proposition R with own code in binary64 automatic differentiation (a numerical check, not a proof) agree to 8e-16, own values of the 42 dual norms below the archived bounds; degree 0 and 1 consistent",
+   "full level B (PENT-21c): the enclosure of all 13,024 coefficients of degree 2 to 13 computed with own programs (Gram and mass tables 4,655 of 4,655 equal in exact arithmetic via 15 primes; the constants with the one-sided inequalities used by the proof, 4 of 4; the explicit part K for all 13,024 coefficients, using the exact form a F0 + b + c/F0 of its dependence on F0; both dual norms; the quadratic and the shift bounds; support audit: no nonzero coefficient outside the 13,024 exponents; the archived centres Tm have 12,968 nonzero entries). Route (i), inclusion of the own intervals in the archived ones: 7,086 of 13,024, does not pass. Route (ii), passed: the own enclosure Tm' +- Em' (intersecting Tm +- Em for 13,024 of 13,024 coefficients; Em'/Em approximately 0.49-1.05, outward-rounded bounds 0.4905-1.0507) with level A re-proved: 64 of 64 vertex matrices, 6,942 of 6,942 P boxes (own C++/GMP), three tampering tests rejected. In certificate units: archived enclosure tau = 0.0180572461 (0.0062543912 + 0.0013950290 + 0.0104078259), smallest pivot 0.0349222788; reviewer's enclosure tau = 0.0175600042 (0.0063582835 + 0.0013995222 + 0.0098021984), smallest pivot 0.0365931194",
+   "producer-side replay of the reviewer's enclosure (2026-11-21, second_party/producer_side_replay_of_PENT-21c/): checker/lglocal_cert_check.py on Tm', Em' with the stored boxes: CERTIFICATE OK (level A, all 6,942 P boxes, smallest margin 2.47e-8); the reviewer's centres differ from ours by at most 0.07 of the archived radius of K"
+  ],
+  "requested_and_done": [
+   "export of the certificate data",
+   "all boxes listed with witnesses",
+   "no floating point in the decisions of the positivity proof"
+  ],
+  "pending": [],
+  "not_checked_independently": [
+   "the floating-point construction of the trial functions is not re-run by the reviewer (not needed: the proof uses the stored lists as exact data)",
+   "known diagnostic mismatch, not used by the proof: the stored diagnostic interval forms_at_c.eps0_sq lies about 3.2e-119 above the reviewer's exact enclosure; the one-sided bound eps0 used by the proof passes",
+   "the producer's from-scratch run (python-flint) has not yet been repeated by the reviewer in a clean environment (PENT-25: blocked offline); the producer repeated it on the author's computer with an identical list of boxes"
+  ],
+  "verdict": "GPT PENT-21c (2026-11-18): level B FULL-PASS (route ii: own enclosure, level A re-proved); the local theorem passed this second-party computational review (not peer review); accepted by Claude 2026-11-21 (reviews/PENT-21c-20261121/). Earlier: PENT-21 (analysis), PENT-21b (level A replayed in full, level B spot checks)",
+  "release_review": "PENT-25 (GPT, 2026-11-22): manifests 113/113 (root) and 42/42 (local_theorem) OK; the published checker ran as a reader would to 1,500 of 6,942 P boxes without error within its 180 s time limit; the from-scratch run was blocked (python-flint not installable offline); own GMP replay of both enclosures on the stored boxes: 6,942 of 6,942 each. Verdict CHANGES-REQUIRED on wording and metadata, applied in this version; does not withdraw the PENT-21c verdict. PENT-25b (GPT, 2026-11-22): minimal-difference re-review of the corrected tree, SIGN-OFF for the local result (not a publication decision, not peer review); the reviewer's own from-scratch run remained blocked (no python-flint offline) and it did not itself compare the tree with the public version 1.0 tag"
+ }
+}

@@ -1,0 +1,54 @@
+  family and exact tables 6.6s
+  F(regular pentagon) in [18.9191028943, 18.9191047951]; |grad e| <= 1.014e-03 (relative 4.58e-04), |e| <= 2.207e-04
+  triangle 0 done 7.4s
+  triangle 1 done 8.1s
+  triangle 2 done 8.8s
+  triangle 3 done 9.6s
+  triangle 4 done 10.3s
+  assembled 12.5s: 12968 coefficients, 13024 error bounds
+  degree 0: computed 9.504e-07, bound 2.827e-04;  degree 1: largest |computed| 3.128e-06, bounds about 9.150e-04  (units of F);  largest ratio 0.003
+  symmetry: the ten relabelling maps fix c: True; norm of the mean differential <= 5.16e-119
+  inner box 0.0078125: positive definite at all 64 vertices (smallest pivot 0.3199); tau = 0.1654 (errors of degree 2: 0.0573, degree 3: 0.0128, degree >= 4: 0.0953), in units of F
+  side conditions on the cube of half-width 0.05078125: determinants positive, M_z <= 2 M_c, det_z <= 2 det_c; Lemma LG applicable to the true family: True (allowance 3.156e-02 against 7.776e+00 at the centre)
+{
+ "N": 16,
+ "n": 17,
+ "rho_in": "1/128",
+ "R": "52429/1048576",
+ "W": "13/256",
+ "F_lo_float": 18.9191028942787,
+ "F_up_float": 18.919104795073583,
+ "eps1": 0.0010144123668287001,
+ "eps0": 0.0002207321066997962,
+ "KS": "3633682907/100000000",
+ "HB": "1/1125899906842624",
+ "low_check": true,
+ "symmetry": true,
+ "inner": true,
+ "side": true,
+ "shell": true,
+ "shell_stats": {
+  "inner": 32,
+  "out": 965,
+  "proved": 6942,
+  "tests": 10913,
+  "failed": 3971,
+  "minrad": 0.0015869140625,
+  "crude": 0,
+  "sec": 369.8
+ },
+ "cert_sha256": {
+  "constants.json": "143b5afaa4a2efb02b9acdbad0e1c19f8054dedb1c0f6cb88a2c0e057cc1a456",
+  "gram.json.xz": "2d59650ea2335f3f2964ef321a8d04dbf99a2b41749d42aad99dc74f00521935",
+  "inner.json": "35d62aa35484d1b903698c1af68ee4dffd601da680c140445c8d87f1750a97e1",
+  "inputs.json": "5e0afb0d9533c47978e9d9f0a00006f6a8e0f5624ba788a3e1d43ca076a751a3",
+  "leaves.jsonl": "49ddc0326f98955040ca3bde5623f5a5542be6e39366c87159f3a090426eda71",
+  "lowdeg.json": "b22a07db6083c38cd21bb3de5b13d7631404526db169056b9174d7315c2b7f68",
+  "rho_c.json": "1b2dcefd15711bffea602c1fdec892a0098cdd22865b36074bdec962ccbf6cf4",
+  "witness.json": "a0eeab8949be429dc2ff6a27ca737048fa36ce9492953f6fb476dce803e00efe"
+ },
+ "ok": true,
+ "sec": 383.1,
+ "claim": "F(P(z)) > F(P(c)) for every chart point z != c with |z - c|_2 < R (c: the regular pentagon), if ok"
+}
+LOCAL THEOREM: PROVED (computation complete)

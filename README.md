@@ -1,12 +1,14 @@
 # pentagon-paqc-proofs
 
-**Status: computer-assisted proof candidate (for the stated cells), not peer reviewed.**
-Version 1.0 (1 November 2026). Author: Puyi Sun (ORCID [0009-0004-1644-5300](https://orcid.org/0009-0004-1644-5300)).
+**Status: computer-assisted proof candidate (for the stated cells and the stated ball), not peer reviewed.**
+Version 1.1 (23 November 2026; adds `local_theorem/`). Version 1.0: 1 November 2026. Author: Puyi Sun (ORCID [0009-0004-1644-5300](https://orcid.org/0009-0004-1644-5300)).
 
 ## Problem
 For a planar domain Ω let F(Ω) = λ₁(Ω)·|Ω|, where λ₁ is the first Dirichlet eigenvalue of the Laplacian.
 The Pólya–Szegő conjecture (1951) says that among all pentagons the regular one minimises F. Its value is F\* ≈ 18.9191043.
-The conjecture is open.
+The conjecture was open when version 1.0 was released. A preprint by H. Wang (arXiv:2611.22305, dated 17 November
+2026) claims a proof for all simple polygons with at most n sides, n ≥ 5, which contains the pentagon case; it has
+not been peer reviewed, and we have not checked it. Neither version of this repository depends on it.
 
 ## Result
 This repository does **not** prove the conjecture. It contains:
@@ -30,9 +32,25 @@ This repository does **not** prove the conjecture. It contains:
 4. **An estimate of the cost of covering a whole region** (paper, Section 6), for one labelling of each pentagon (the
    Dirichlet domain of the D5 relabelling action). It is an estimate, not a certificate; data and code are in `cost/`.
 
+### Version 1.1: an explicit ball around the regular pentagon (`local_theorem/`)
+A computer-assisted proof candidate that the regular pentagon is the strict minimiser of F in the explicit ball
+|z − c|₂ < 52429/2²⁰ (> 1/20) of the shape chart (c = the regular pentagon), with a certificate checked in exact
+rational arithmetic. It uses a different method (a Lehmann–Goerisch bound with a trial family that contains the
+true eigenfunction) and does not depend on the PAQC certificates above. Both levels of its certificate were
+recomputed by the second party (an AI reviewer) with separately written programs (`local_theorem/second_party/`);
+this is not peer review.
+It does not prove the conjecture. See `local_theorem/README.md`.
+
+### Erratum to version 1.0, Section 6 (cost estimate)
+The CPU-day figures of Section 6 of version 1.0 estimate a continuum proxy, not the cost of a constructed rigorous
+cover, and need correction for the cost-accounting convention and for the two mirror-related representatives of each
+generic shape in the chosen relabelling domain; see `ERRATUM-v1.0-section6.md`. This concerns the exploratory cost model only: it does not
+change the six archived PAQC certificates or the local result of version 1.1. The dated version 1.0 is unchanged.
+
 ## Files
 | path | content |
 |---|---|
+| `local_theorem/` | version 1.1: Theorem L (explicit ball of strict minimality), its paper, proof, certificate, checker, producer and second-party review; own README and manifest |
 | `paper/paper.pdf`, `paper/paper.tex` | the note (`main.tex` is the template filled by `tools/make_paper.py`) |
 | `certificates/*_v6.json` | one file per cell: binary64 cell endpoints, 64 corner eigenvalue certificates, the geometry or branch-and-bound record (accepted leaves) |
 | `certificates/fstar_exact.json` | producer upper bound for the regular pentagon |

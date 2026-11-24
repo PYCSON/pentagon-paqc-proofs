@@ -1,0 +1,18 @@
+witness: 13024 coefficients, 13024 error bounds; R = 52429/1048576 (0.050000191), W = 13/256, rho_in = 1/128, keep = 6; 7939 leaves
+1. inner cube: positive definite at the 64 vertices; tau = 1.756000e-02 (tau2 6.358284e-03, tau3 1.399522e-03, tau>=4 9.802198e-03), smallest pivot 3.659312e-02
+2. tiling: 7939 leaves (I 32, O 965, P 6942); inside the half cube, pairwise interior-disjoint, volumes add up: ok  (33s)
+   500 / 6942 P leaves, 172s
+   1000 / 6942 P leaves, 330s
+   1500 / 6942 P leaves, 484s
+   2000 / 6942 P leaves, 642s
+   2500 / 6942 P leaves, 806s
+   3000 / 6942 P leaves, 931s
+   3500 / 6942 P leaves, 1038s
+   4000 / 6942 P leaves, 1149s
+   4500 / 6942 P leaves, 1265s
+   5000 / 6942 P leaves, 1373s
+   5500 / 6942 P leaves, 1487s
+   6000 / 6942 P leaves, 1598s
+   6500 / 6942 P leaves, 1709s
+3. leaves: I 32 and O 965 checked; P leaves proved 6942 of 6942 checked (all; crude bound 0); smallest margin 2.472e-08  (1807s)
+CERTIFICATE OK (level A, all leaves)

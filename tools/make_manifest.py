@@ -10,7 +10,7 @@ for d, dirs, files in os.walk(ROOT):
     dirs[:] = sorted(x for x in dirs if x not in SKIP_DIRS)
     for f in sorted(files):
         rel = os.path.relpath(os.path.join(d, f), ROOT)
-        if f in SKIP_FILES or f.endswith('.pyc') or (rel.startswith('paper' + os.sep) and f.endswith(SKIP_EXT)):
+        if rel in SKIP_FILES or f.endswith('.pyc') or (rel.startswith('paper' + os.sep) and f.endswith(SKIP_EXT)):
             continue
         rows.append((rel, hashlib.sha256(open(os.path.join(d, f), 'rb').read()).hexdigest()))
 rows.sort()

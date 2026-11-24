@@ -1,16 +1,16 @@
 {
-  "title": "Certified lower bounds for λ1·Area on cells of pentagon shape space by piecewise-affine transplantation",
+  "title": "Certified lower bounds for λ1·Area on cells of pentagon shape space by piecewise-affine transplantation, and an explicit ball of strict minimality of the regular pentagon",
   "upload_type": "software",
-  "description": "<p><strong>Computer-assisted proof candidate (for the stated cells), not peer reviewed.</strong> This is not a proof of the Pólya–Szegő conjecture for pentagons, nor of any statement about a neighbourhood of the regular pentagon.</p><p>A method (PAQC) that certifies F(P) = λ1(P)·|P| &gt; F(regular pentagon) simultaneously for every pentagon P in a six-dimensional box of shape space, using only the first Dirichlet eigenvalues of the 64 corner pentagons and exact matrix inequalities from a piecewise-affine transplantation; six certificates for five boxes, evaluated in ball arithmetic; a partial independent second-party replay; a short paper; and an estimate of the cost of covering a whole region. AI assistance is disclosed in README.md. Licences: text and data CC BY 4.0; code MIT.</p>",
+  "description": "<p><strong>Computer-assisted proof candidate (for the stated cells and the stated ball), not peer reviewed.</strong> This is not a proof of the Pólya–Szegő conjecture for pentagons.</p><p>Version 1.1 adds <code>local_theorem/</code>: a computer-assisted proof candidate that the regular pentagon is the strict minimiser of F in the explicit ball |z − c|₂ &lt; 52429/2²⁰ of the fixed-first-edge shape chart, with a certificate checked in exact rational arithmetic, independent of the PAQC certificates; both levels of its certificate were recomputed by a second-party AI reviewer with separately written programs (not peer review). The new local theorem makes no claim outside that ball. Version 1.0 (1 November 2026) remains available unchanged. A preprint by H. Wang (arXiv:2611.22305, 17 November 2026) claims a proof of the Pólya–Szegő inequality for all simple polygons with at most n ≥ 5 sides; it has not been peer reviewed, and neither version of this repository depends on it.</p><p>Version 1.0 content:</p><p>A method (PAQC) that certifies F(P) = λ1(P)·|P| &gt; F(regular pentagon) simultaneously for every pentagon P in a six-dimensional box of shape space, using only the first Dirichlet eigenvalues of the 64 corner pentagons and exact matrix inequalities from a piecewise-affine transplantation; six certificates for five boxes, evaluated in ball arithmetic; a partial independent second-party replay; a short paper; and an estimate of the cost of covering a whole region. AI assistance is disclosed in README.md. Licences: text and data CC BY 4.0; code MIT.</p>",
   "creators": [
     {"name": "Sun, Puyi", "orcid": "0009-0004-1644-5300"}
   ],
   "license": "cc-by-4.0",
-  "keywords": ["Pólya–Szegő conjecture", "Dirichlet eigenvalue", "pentagon", "transplantation", "interval arithmetic", "computer-assisted proof"],
+  "keywords": ["Pólya–Szegő conjecture", "Dirichlet eigenvalue", "pentagon", "transplantation", "interval arithmetic", "computer-assisted proof", "Lehmann–Goerisch bound", "local minimality"],
   "related_identifiers": [
     {"identifier": "arXiv:2406.11575", "relation": "references", "scheme": "arxiv"},
     {"identifier": "arXiv:2609.18500", "relation": "references", "scheme": "arxiv"},
     {"identifier": "10.5281/zenodo.23066520", "relation": "references", "scheme": "doi"}
   ],
-  "version": "1.0"
+  "version": "1.1"
 }
