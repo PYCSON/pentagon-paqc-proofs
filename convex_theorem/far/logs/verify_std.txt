@@ -1,0 +1,12 @@
+  std 11_10: root [0, 11, 10, 0, 1]: LG bound 22.913805717702118 of the part [0.6875, 0.625, 0.0, 0.0625] not re-proved
+  std 14_3: root [0, 14, 3, 5, 4]: LG bound 30.768846394291046 of the part [0.90625, 0.21875, 0.3125, 0.28125] not re-proved
+  std 16_4: root [0, 16, 4, 7, 6]: LG bound 24.85992376636522 of the part [1.0, 0.25, 0.4375, 0.375] not re-proved
+  std 2_6: root [0, 2, 6, -3, 4]: LG bound 25.684860679435232 of the part [0.125, 0.375, -0.1875, 0.25] not re-proved
+  std 5_10: root [0, 5, 10, 3, 7]: LG bound 22.219425740141975 of the part [0.3125, 0.625, 0.1875, 0.4375] not re-proved
+  std 5_9: root [0, 5, 9, 4, 8]: LG bound 23.56249297332678 of the part [0.3125, 0.59375, 0.28125, 0.5] not re-proved
+  std 6_7: root [0, 6, 7, -10, 1]: LG bound 28.80248422545246 of the part [0.375, 0.4375, -0.625, 0.0625] not re-proved
+  std 6_9: root [0, 6, 9, -2, 0]: LG bound 23.161249026245805 of the part [0.375, 0.5625, -0.125, 0.0] not re-proved
+  std 6_9: root [0, 6, 9, 5, 9]: LG bound 23.143357245975036 of the part [0.40625, 0.5625, 0.34375, 0.59375] not re-proved
+  std 8_9: root [0, 8, 9, 7, 10]: LG bound 22.814297545029152 of the part [0.5, 0.59375, 0.4375, 0.65625] not re-proved
+std: blocks checked 428 (unfinished 0), columns 114186, boxes 1228647, T1 leaves 0, labels {'C': 293846, 'E2': 14798, 'E3': 18266, 'N': 85147, 'O': 17522, 'R': 531, 'S': 19832, 'T': 324858, 'TX': 15120, 'V': 83, 'X': 438644}, certificates replayed 904 (box certificates among the certified: 293846), corner values recomputed 0, polynomial certificates re-proved 0, labels recomputed 117456, root range: 262144 cells, 57093 roots, the others re-classified, table: roots with a bound 57093, LG entries re-proved 8288, tangent-bound entries not re-proved 0
+VERIFY FAILED: 10 problems

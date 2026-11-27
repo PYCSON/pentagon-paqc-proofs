@@ -1,0 +1,12 @@
+pentagons 30000 final leaves: {'E2 C': 67, 'E2 O': 15, 'E2 S': 20, 'E2 T': 314, 'E2 TX': 1194, 'E3 C': 24, 'E3 O': 172, 'E3 S': 6114, 'E3 T': 690, 'E3 TX': 640, 'handed to E2': 1610, 'handed to E3': 7640, 'std C': 3330, 'std N': 407, 'std O': 74, 'std S': 2138, 'std T': 10780, 'std TX': 4021}
+inconclusive (pointwise lower bound below F*_up): {}
+PASS
+
+real	21m28.236s
+user	21m9.723s
+sys	0m3.948s
+
+[exited with code 0]
+
+Note (2026-11-19): the first run of this seed (before the quadrilateral bound F >= 2 pi^2 |P|/|Q| was added as a pointwise
+fallback) gave the same leaf counts, PASS, and 155 inconclusive points; with the extra bound none is inconclusive.

@@ -1,0 +1,13 @@
+pentagons 50000 final leaves: {'E2 C': 47, 'E2 O': 25, 'E2 S': 47, 'E2 T': 538, 'E2 TX': 745, 'E3 C': 21, 'E3 O': 164, 'E3 S': 2217, 'E3 T': 928, 'E3 TX': 645, 'handed to E2': 1402, 'handed to E3': 3975, 'skipped: no edge with C_k > 0': 2, 'std C': 8940, 'std N': 11931, 'std O': 35, 'std S': 3228, 'std T': 17373, 'std TX': 2996}
+inconclusive (pointwise lower bound below F*_up): {}
+PASS
+
+real	38m38.123s
+user	37m55.938s
+sys	0m6.949s
+
+[exited with code 0]
+
+Note (2026-11-19): the two "skipped: no edge with C_k > 0" are pentagrams (winding number 2, all turns left) produced by the
+perturbed-regular generator, not convex pentagons (checked by replaying the generator: iterations 35567 and 45996,
+winding 2.0). The generator now rejects them.

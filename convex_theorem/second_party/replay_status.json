@@ -1,0 +1,27 @@
+{
+ "status": "computer-assisted proof candidate, not peer reviewed",
+ "date": "2026-11-27",
+ "theorem": "F(P) >= F(P_reg) for every convex pentagon P (simple, of positive area), with equality if and only if P is similar to the regular pentagon",
+ "parts": {
+  "Theorem L": "signed by the second party (analysis PENT-21, level A PENT-21b, level B PENT-21c route ii, release tree PENT-25c, final tree with the Wang credit PENT-25d); version 1.1, see ../../local_theorem/second_party/replay_status.json (repository-relative: local_theorem/second_party/replay_status.json)",
+  "Theorem N": "signed by the second party (PENT-26, 2026-11-28). Passed: Lemma S (simplicity), mirror, root cube, skip tests, cover argument (PENT-23); structure of all 1,344 blocks and 51,434 leaves, twice with separately written programs (PENT-23, PENT-24); the box certificate formulas (PENT-21); the outside subboxes of the second-party re-certification (PENT-26a). Independent full run: all 38,280 near targets re-proved on the author's computer by the independent program (38,267 in the main run, 1 in a first supplementary round with the trial degree raised by two, 12 in a second supplementary round with outside subboxes: 86 LG and 109 outside subboxes), 22-26 November 2026; every stored witness replayed; the producer's acceptance program agrees shard by shard",
+  "Theorem F": "signed by the second party (PENT-26, 2026-11-28). Passed: kept representation, corner principle, root ranges and hand-over, the eight ear comparisons, the strips, the fibre lemmas, the cover argument (PENT-22); structure of the whole cover and of the table (PENT-24); label and table criteria with a ledger of statements and proofs (PENT-24b, PENT-24c, LABEL_ROUTES.md). Independent full run: all 377,515 certified boxes (far_std 293,846, far_E2 47,804, far_E3 35,865), all 185,100 table entries and all 1,346,929 labels (299,994 of them through the table) re-proved on the author's computer by the independent program, 22-24 November 2026; every stored witness replayed (finished 27 November 2026); the producer's acceptance program agrees shard by shard",
+  "assembly": "logic passed (PENT-23 A6); signed by the second party (PENT-26, 2026-11-28)"
+ },
+ "second_party": {
+  "reviewer": "GPT (OpenAI), an AI system; programs written separately from the producer, no producer program run or imported in these rounds. A second-party AI-assisted computational review, not peer review",
+  "independent_checker": "second_party/independent_checker/ (package r3 of 22 November 2026 with the resumable replay of PENT-24c and the outside route of PENT-26a); code identity 7cf79beefbc81c796969279b7c4d8bf35c7ecb0525e41f2fe3d88d2c629e2d3b; supplementary rounds 8ab8cb73fb880cb4a9af0cc895bd40913ab12722f91658d12e36dc9f342eb619 (round 1) and beb45023db067a2d2b38fa66746345cc0cdd3f5d5dee99086beb2c57da294e9b (round 2); frozen input second_party/independent_checker/PENT24_bundle_b8ab7c1.zip (SHA-256 1aba5f0a693313b515d9b3b0952747cd61ced2b4b5fb2d3c9c5783333ff2f958)",
+  "classical_inputs_not_reproved": [
+   "Polya-Szego for triangles and quadrilaterals",
+   "Makai's inequality for convex planar domains",
+   "the Hong-Krahn-Szego bound for the second eigenvalue (constant 36.33682907 < 2 pi j_{0,1}^2 = 36.336829071...)",
+   "domain monotonicity and the Poincare inequality on a strip"
+  ],
+  "final_reports": "second_party/final_reports/ (replay report SHA-256 a9cd3b826d39b0e098aacebe1f192d7bb7fd71f2911a82f94671883ca1e48736, acceptance report 4f77091685bd1c4ca8753aeddfe6096838f30d4d4867da6f034bceb20ef42b50, comparison: CONSISTENT on all nine stages, 15,239 shard files)"
+ },
+ "producer_review_of_the_checker": "second_party/producer_review/README.md: kernel, criteria and structure checkers read without finding an error; 1,222 of the reviewer's witnesses cross-checked at 2,484 points by a separate exact computation",
+ "not_done": [
+  "peer review; review of the mathematics by human experts",
+  "the witnesses of the independent run (about 15 GiB) are not part of this tree; they are reproduced by running the checker on the frozen input, and the SHA-256 values of all 15,239 shards are recorded in both reports"
+ ]
+}

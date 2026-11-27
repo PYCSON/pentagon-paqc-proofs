@@ -1,0 +1,6 @@
+accept_pent24 v2 2026-11-23 20:34:55 stages near supplements <sandbox>/acc26a/supplement_2
+near     targets 38280  main: shard files 1, leaves 0 (largest tree 0), sha256 of the rows 9ca8606fefab42c9af4f47c3f57aaba901c5a1e3e5ed06d491cca01065173338, of the listing a6a33338ecce1627962ef2434e9e881fe363bce3f937752b1a0823abed35d94c
+         supplement_2: shard files 1, leaves 94 (largest tree 22), outside leaves 118, sha256 of the rows c0380f13f6ddcbc7e5eb6bd05863db88c2530fef53b74c6ddfab300e16b027b0, of the listing b86812ec426414c4d91534492fb7e8eb633a0bee9d125a811211da13e922a9b6
+         result {"MISSING": 38267, "PROVED": 13}
+spot check: 94 leaves (uniform over 94 proved leaves) x 4 points: failures 0, smallest relative margin 6.027e-02
+ACCEPT: coverage and binding complete for the requested stages

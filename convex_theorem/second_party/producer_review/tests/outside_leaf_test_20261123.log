@@ -1,0 +1,20 @@
+  REJECTED near/132012/3 main outside leaf not allowed here
+near     targets 38280  main: shard files 1, leaves 0 (largest tree 0), sha256 of the rows 2e471ecf6b4b700b4fcdbf40c8eff1a7d6855fde3706a0246768110547dc3574, of the listing 984fced0a7d08c0140deac4087794a79657a644416b1f9071ae0563fd1670682
+  REJECTED near/233021/2 supplement_1 outside leaf meets the near region
+  REJECTED near/132022/72 supplement_1 extra keys at a leaf
+         supplement_1: shard files 1, leaves 26 (largest tree 26), outside leaves 41, sha256 of the rows ac3d16e2aecc84c75d4558eb0624e8c080e5f6dc4ad03606a7e4aff9833975e0, of the listing 31326d74a7b4cfe1b975f26c0a14b451fe2964793ad63cf5784e25b97cc20d87
+         result {"MISSING": 38266, "PROVED": 1, "REJECTED": 3, "UNPROVED": 10}
+         rejected: {"extra keys at a leaf": 1, "outside leaf meets the near region": 1, "outside leaf not allowed here": 1}
+         not proved: near/132012/151 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/132012/26 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/132012/3 REJECTED {}
+         not proved: near/132012/47 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/132022/157 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/132022/72 REJECTED {"in": "main", "reason": "budget"}
+         not proved: near/132102/10 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/133022/30 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/133022/40 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/232012/19 UNPROVED {"in": "main", "reason": "budget"}
+         not proved: near/233021/2 REJECTED {"in": "main", "reason": "budget"}
+NOT COMPLETE (see above)
+exit 1

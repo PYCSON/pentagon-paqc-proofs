@@ -1,0 +1,13 @@
+near     target 38280 | listings GPT 316, Claude 316, IDENTICAL (rounds main,supplement_1,supplement_2, main shards 300) | GPT {"PROVED": 38280} | Claude {"PROVED": 38280}
+q_lg     target 66138 | listings GPT 517, Claude 517, IDENTICAL (rounds main, main shards 517) | GPT {"PROVED": 66138} | Claude {"PROVED": 66138}
+q_other  target 118962 | listings GPT 930, Claude 930, IDENTICAL (rounds main, main shards 930) | GPT {"PROVED": 118962} | Claude {"PROVED": 118962}
+far_std  target 293846 | listings GPT 2296, Claude 2296, IDENTICAL (rounds main, main shards 2296) | GPT {"PROVED": 293846} | Claude {"PROVED": 293846}
+far_E2   target 47804 | listings GPT 374, Claude 374, IDENTICAL (rounds main, main shards 374) | GPT {"PROVED": 47804} | Claude {"PROVED": 47804}
+far_E3   target 35865 | listings GPT 281, Claude 281, IDENTICAL (rounds main, main shards 281) | GPT {"PROVED": 35865} | Claude {"PROVED": 35865}
+B_std    target 934801 | listings GPT 7304, Claude 7304, IDENTICAL (rounds main, main shards 7304) | GPT {"CONDITIONAL_TABLE": 299994, "PROVED": 634807} | Claude {"CONDITIONAL_TABLE": 299994, "PROVED": 634807}
+B_E2     target 185823 | listings GPT 1452, Claude 1452, IDENTICAL (rounds main, main shards 1452) | GPT {"PROVED": 185823} | Claude {"PROVED": 185823}
+B_E3     target 226305 | listings GPT 1769, Claude 1769, IDENTICAL (rounds main, main shards 1769) | GPT {"PROVED": 226305} | Claude {"PROVED": 226305}
+GPT gates: {"F_computational_gate": true, "N_computational_gate": true, "all_shards_enumerated": true, "q_table_closed": true, "structure": true}; attempt_reject_stages []
+Claude: spot check: 400 leaves (uniform over 676840 proved leaves) x 2 points: failures 0, smallest relative margin 3.119e-04
+Claude: ACCEPT: coverage and binding complete for the requested stages
+VERDICT: CONSISTENT

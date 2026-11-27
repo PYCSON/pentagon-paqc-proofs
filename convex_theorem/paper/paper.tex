@@ -1,0 +1,708 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{textcomp}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\N}{\mathfrak{N}}
+\newcommand{\s}{\mathfrak{s}}
+\newcommand{\tf}{\mathfrak{t}}
+\newcommand{\B}{\mathfrak{B}}
+\newcommand{\D}{\mathfrak{D}}
+\newcommand{\gr}{\nabla_{\!r}}
+\DeclareMathOperator{\dv}{div}
+\DeclareMathOperator{\curl}{curl}
+\title{The P\'olya--Szeg\H{o} conjecture for convex pentagons\\[4pt]
+\large Computer-assisted proof candidate, not peer reviewed\\
+(Version 2.0, 2026-11-28)}
+\author{Puyi Sun\thanks{ORCID 0009-0004-1644-5300. See Section~\ref{sec:ai} for the roles of AI systems in this work.}}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a planar domain $\Omega$ let $F(\Omega)=\lambda_1(\Omega)\,|\Omega|$, $\lambda_1$ the first Dirichlet eigenvalue of the
+Laplacian. P\'olya and Szeg\H{o} conjectured that among polygons with $n$ sides the regular one minimises $F$; this is
+classical for $n=3,4$; a recent preprint \cite{wang} claims a proof for all $n\ge5$ (for simple polygons with at most $n$
+sides). Independently of it, we describe a computer-assisted proof candidate of the statement for \emph{convex}
+pentagons: $F(P)\ge F(P_{\mathrm{reg}})$ for every convex pentagon $P$, with equality if and only if $P$ is similar to the regular
+one. The proof has three parts: an explicit ball around the regular pentagon in a six-dimensional chart, where a
+Lehmann--Goerisch bound with a trial family containing the true eigenfunction is exact at the centre, with vanishing
+gradient; an annulus,
+covered by boxes on each of which one trial family proves the bound for all pentagons of the box; and the rest, treated
+in a chart in which a pentagon is a quadrilateral with a corner cut off. Every decision of the computations is an
+inequality between exact rational numbers or a statement of ball arithmetic, and the certificates can be replayed box
+by box. All certificates of the three parts were re-derived and replayed by independently written programs of a
+second-party AI reviewer. Non-convex pentagons are not covered.
+\end{abstract}
+
+\section{Result and structure of the proof}
+P\'olya and Szeg\H{o} proved that the equilateral triangle and the square minimise $F$ among triangles and
+quadrilaterals and conjectured the same for $n$-gons, $n\ge5$ \cite{ps}. Bogosel and Bucur reduced the case of fixed
+$n$ to a finite computation \cite{bb-jep} and proved, with interval arithmetic, that the regular pentagon and hexagon
+are local minimisers \cite{bb-val} (we did not find an explicit size of the neighbourhood there); it is not known a priori that an optimal
+polygon is convex \cite{bb-jep}. A public repository maintained under the GitHub account \texttt{xfliu} \cite{liu}
+contains a computer-assisted proof of strict local minimality of the regular pentagon along every direction for
+parameters $t\le1/6250$ (an explicit neighbourhood in its own coordinates), based on the one-vector Lehmann--Goerisch
+bound. The conjecture is known for convex polygons with sufficiently many sides \cite{cghl}, and its local version for
+the torsional rigidity for all $n\ge5$ \cite{bbf}; the same authors have since posted a preprint claiming an analytic proof of the
+torsional (Saint-Venant) inequality for all $n\ge3$ \cite{bbf2}, in which they regard a transparent, human-verifiable
+proof of the eigenvalue inequality as a goal that remains worthwhile. A preprint of H.~Wang \cite{wang} (17 November 2026) claims a proof of
+the P\'olya--Szeg\H{o} inequalities for the first eigenvalue and the torsional rigidity for every $n\ge5$ and all simple
+polygons with at most $n$ sides; it contains the case of convex pentagons treated here. It has
+not been peer reviewed, and we have not checked it. The present work does not depend on it: it is an independent,
+computer-assisted argument for the convex case by a different method, whose certificates can be replayed.
+This work was carried out independently of \cite{wang}: an earlier stage of it on the same problem and in the same
+chart (another certification method and certificates for a few boxes of pentagons) was released on 1 November 2026 as
+version~1.0 of the accompanying repository \cite{v10}, and we learned of
+\cite{wang} on 23 November 2026, after the certificates of Sections~\ref{sec:near}--\ref{sec:labels} had been
+computed. No argument of \cite{wang} is used here, and we make no priority claim.
+
+\begin{theorem}\label{thm:main}
+For every convex pentagon $P$ (simple, of positive area): $F(P)\ge F(P_{\mathrm{reg}})$, with equality if and only if $P$
+is similar to the regular pentagon.
+Moreover $18.9191028942<F(P_{\mathrm{reg}})<18.9191047951$.
+\end{theorem}
+
+\paragraph{Chart.} $z\in\R^6\mapsto P(z)$ = the polygon with vertices $(0,0),(1,0),(z_1,z_2),(z_3,z_4),(z_5,z_6)$.
+Let $c$ be the point of the regular pentagon and $C$ the point of binary64 numbers nearest to it, modified so that
+$C_3=\frac12$, $C_5=1-C_1$, $C_6=C_2$ hold exactly; $|C-c|_\infty\le2^{-50}$. A strictly convex pentagon $P$ has ten
+labellings (five cyclic ones, with and without reflection), each giving a chart point $z_h(P)$; put
+$d(P)=\min_h|z_h(P)-C|_2$. Let $F^*$ be the exact terminating decimal $18.919134195733914$; it is larger than the upper
+bound for $F(P(c))$ in Theorem~\ref{thm:L} (so $F(P_{\mathrm{reg}})\approx18.919104$ and the common comparison
+threshold $F^*$ are different numbers). In the near producer, the binary64 literal nearest to this decimal is slightly
+larger (by about $8.3\cdot10^{-17}$). Some far producer routines use an outward bound derived from the regular-pentagon
+certificate and others use individual table targets. A certificate for any larger target implies the stated
+inequality; stored table targets and binary64 geometric inputs are interpreted as their exact encoded rationals. The
+independent re-certification uses the exact terminating decimal as the common target and verifies the stored table
+bounds separately.
+
+\begin{theorem}[local]\label{thm:L}
+For every $z$ with $0<|z-c|_2<R=52429/2^{20}$ $(>\frac1{20})$, $P(z)$ is a simple pentagon and $F(P(z))>F(P(c))$. Moreover
+$18.9191028942<F(P(c))<18.9191047951$.
+\end{theorem}
+\begin{theorem}[near]\label{thm:N}
+For every $z$ with $\frac1{20}\le|z-C|_2<\frac35$, $P(z)$ is a simple pentagon, star-shaped with respect to an
+interior point, and $F(P(z))>F^*$.
+\end{theorem}
+\begin{theorem}[far]\label{thm:F}
+Every strictly convex pentagon $P$ satisfies $F(P)>F^*$ or $d(P)<\frac35$.
+\end{theorem}
+\begin{proof}[Proof of Theorem~\ref{thm:main} from Theorems~\ref{thm:L}--\ref{thm:F}]
+A convex pentagon with a flat vertex is a quadrilateral or a triangle, and $F\ge2\pi^2>F^*>F(P(c))$ for those
+\cite{ps}. Let $P$ be strictly convex. $F$ is invariant under similarities and reflections, so $F(P)=F(P(z))$ for each
+of its chart points. If $d(P)\ge\frac35$, then $F(P)>F^*>F(P(c))$ by Theorem~\ref{thm:F}. Otherwise let
+$z=z_h(P)$ with $|z-C|<\frac35$. If $|z-C|\ge\frac1{20}$, Theorem~\ref{thm:N} applies. If $|z-C|<\frac1{20}$, then
+$|z-c|<\frac1{20}+\sqrt6\,2^{-50}<R$, and Theorem~\ref{thm:L} gives $F(P)>F(P(c))$ unless $z=c$.
+\end{proof}
+
+All three theorems rest on one inequality (Lemma~\ref{lem:LG}) applied to piecewise polynomial trial functions on a fan
+of triangles; the certificates are positivity statements for polynomials with rational coefficients
+(Section~\ref{sec:cert}). Theorem~\ref{thm:F} uses in addition classical bounds and a covering argument
+(Sections~\ref{sec:cut}--\ref{sec:cover}).
+
+\section{The lower bound}
+\begin{lemma}[one-vector Lehmann--Goerisch bound]\label{lem:LG}
+Let $\Omega\subset\R^2$ be a bounded domain with Dirichlet eigenvalues $0<\lambda_1\le\lambda_2\le\dots$, and
+$\nu\le\lambda_2$. Let $u\in H^1_0(\Omega)$, $u\ne0$, and $w\in H(\dv;\Omega)$ with $-\dv w=u$, and
+$A_0=\|\nabla u\|^2$, $A_1=\|u\|^2$, $A_2=\|w\|^2$. If $A_0<\nu A_1$, then $\nu A_2-A_1>0$ and
+\[
+\lambda_1\ \ge\ \frac{\nu A_1-A_0}{\nu A_2-A_1}.
+\]
+\end{lemma}
+\begin{proof}
+Let $\psi\in H^1_0$ solve $-\Delta\psi=u$. For $f\in H^1_0$: $\int\nabla f\cdot w=\int fu=\int\nabla f\cdot\nabla\psi$,
+so $w-\nabla\psi\perp\nabla H^1_0$ and $A_2\ge\|\nabla\psi\|^2=:B_2$. With $u=\sum c_k\varphi_k$ in an orthonormal
+eigenbasis and $p_k=c_k^2$: $A_1=\sum p_k$, $A_0=\sum\lambda_kp_k$, $B_2=\sum p_k/\lambda_k$. Put $D=A_0-\nu A_1=
+\sum p_k(\lambda_k-\nu)<0$ and $G_0=A_0-2\nu A_1+\nu^2B_2=\sum p_k(\lambda_k-\nu)^2/\lambda_k$. Then $\lambda_1<\nu$, and
+since $\lambda_k\ge\nu$ for $k\ge2$: $-D\le p_1(\nu-\lambda_1)$ and $\lambda_1G_0\ge p_1(\nu-\lambda_1)^2\ge
+(-D)(\nu-\lambda_1)$, i.e.\ $\lambda_1(G_0-D)\ge\nu(-D)$ with $G_0-D\ge-D>0$. Finally $G:=A_0-2\nu A_1+\nu^2A_2\ge G_0$,
+$t\mapsto\nu(-D)/(t-D)$ is decreasing, and $\nu(-D)/(G-D)=(\nu A_1-A_0)/(\nu A_2-A_1)$.
+\end{proof}
+This is the case of one trial vector of the method of Lehmann and Goerisch \cite{lehmann,gh,bg}. For $u=\varphi_1$,
+$w=\nabla\varphi_1/\lambda_1$ the bound equals $\lambda_1$. We use $\nu=\kappa_0/|\Omega|$ with
+$\kappa_0=36.33682907<2\pi j_{0,1}^2$, admissible by the Krahn--Szeg\H{o} inequality
+$\lambda_2(\Omega)|\Omega|\ge2\pi j_{0,1}^2$ \cite{krahn,hong}.
+
+\section{Reference coordinates and the fan flux}
+Fix a rational point $O$ near the centre of $P(c)$. For $z$ in the cube $\{|z-c|_\infty\le W\}$, $W=13/256$, the fan
+triangles $T_k(z)=(O,V_k(z),V_{k+1}(z))$, $k=0,\dots,4$, have $\det\nolimits_k(z)=e_1\times e_2>0$
+($e_1=V_k-O$, $e_2=V_{k+1}-O$; proved on the whole cube, Section~\ref{sec:side}); since the cube is connected and
+contains $c$, the triangles tile $P(z)$. On $T_k$ write $p=O+ae_1+be_2$ with $(a,b)$ in the reference triangle
+$a,b\ge0$, $a+b\le1$; functions on $P(z)$ are functions of $(k,a,b)$, and $\gr=(\partial_a,\partial_b)$. With
+$n_{11}=|e_1|^2$, $n_{12}=e_1\cdot e_2$, $n_{22}=|e_2|^2$, $\det=\det_k$ put
+\[
+\M_z=\frac1{\det}\begin{pmatrix}n_{22}&-n_{12}\\-n_{12}&n_{11}\end{pmatrix},\qquad
+\N_z=\M_z^{-1}=\frac1{\det}\begin{pmatrix}n_{11}&n_{12}\\n_{12}&n_{22}\end{pmatrix},
+\]
+\[
+b_z(v,v')=\sum_k\det\nolimits_k\!\int vv'\ \Big(=\int_{P(z)}vv'\Big),\qquad
+a_z(v,v')=\sum_k\int\gr v\cdot\M_z\gr v'\ \Big(=\int_{P(z)}\nabla v\cdot\nabla v'\Big),
+\]
+all integrals over the reference triangle. A vector field $w$ on $P(z)$ is represented by $\s=\det\cdot$(its
+components in the basis $e_1,e_2$); then $\int_{P(z)}w\cdot w'=c_z(\s,\s'):=\sum_k\int\s\cdot\N_z\s'$,
+$\nabla v$ corresponds to $\s=\M_z\gr v$, and $\int_{P(z)}w\cdot\nabla f=\sum_k\int\s\cdot\gr f$.
+
+\emph{Fan flux.} For $v$ continuous and piecewise smooth and $\chi$ continuous let $h=(2+E)^{-1}v$, $E=a\partial_a+
+b\partial_b$, i.e.\ $h(s,\theta)=s^{-2}\int_0^st\,v(t,\theta)\,dt$ along the rays from $O$, and
+\[
+\s_z(v,\chi)=\big(-\det\nolimits_k\,a\,h+\partial_b\chi,\ -\det\nolimits_k\,b\,h-\partial_a\chi\big)
+\quad\longleftrightarrow\quad w=-(p-O)\,h+\curl\chi .
+\]
+Then $-\dv w=(2+E)h=v$ in every triangle; across the spokes the normal component of $(p-O)h$ vanishes and that of
+$\curl\chi$ is the tangential derivative of the continuous $\chi$. Hence $w\in H(\dv;P(z))$, $-\dv w=v$, and for
+$f\in H^1_0$
+\begin{equation}\label{eq:IP}
+\sum_k\int\s_z(v,\chi)\cdot\gr f=b_z(v,f).
+\end{equation}
+
+\section{Certificates}\label{sec:cert}
+The notation of the previous section ($\det_k$, $\M$, $\N$, $a$, $b$, $c$, the fan flux) is used below for any polygon
+$P$ with vertices $V_k$ and any point $O$ whose fan determinants $\det_k=(V_k-O)\times(V_{k+1}-O)$ are positive.
+
+\paragraph{One polygon.} Let $P$ be a simple polygon and $O$ a point with all fan determinants $\det_k>0$ and winding
+number one about $O$ (for instance a strictly convex polygon and an interior point); then the fan triangles tile $P$. Take $u$ continuous,
+a polynomial of degree $N$ on every fan triangle (Bernstein form, coefficients $2^{-s}\times$ integers, zero on the
+boundary), and $\chi$ of the same kind of degree $N+1$ without boundary condition. The pair $(u,\s(u,\chi))$ is
+admissible in Lemma~\ref{lem:LG}, and $A_0,A_1,A_2$ are sums over the triangles of fixed rational quadratic forms of the
+coefficient lists (they depend on $N$ only), with the four numbers $n_{11},n_{12},n_{22},\det$ of the triangle as
+weights. With $\nu=\kappa_0/|P|$ the lemma gives a rational lower bound of $F(P)$. The coefficients come from a
+floating-point Rayleigh--Ritz computation and a floating-point least-squares problem for $\chi$; the proof does not
+depend on their quality.
+
+\paragraph{A box of polygons.} Let the vertices be polynomial functions of parameters $\zeta$ in a box
+$X=\{|\zeta_i-m_i|\le\rho_i\}$, $O$ fixed, and let the coefficient lists be affine in $\zeta$:
+$u(\zeta)=u^0+\sum_i(\zeta_i-m_i)u^i$, likewise $\chi$ (the lists $u^i,\chi^i$ are numerical derivatives of the data at
+the centre). If $\det_k(\zeta)>0$ on $X$ for all $k$, the winding number of the fan about $O$ is constant on $X$; it is
+$1$ as soon as one $P(\zeta)$ is a simple polygon (a pentagram, with winding number $2$, also has positive fan
+determinants). Then every $P(\zeta)$, $\zeta\in X$, is a simple polygon, star-shaped about $O$, the triangles tile it, and
+the transplanted pair is admissible on it. With $\D=\prod_k\det_k$, $|P|=\frac12\sum_k\det_k$,
+\[
+P_D:=\D\,(\kappa_0A_1-|P|A_0),\qquad P_C(L):=\D\,\big(|P|(\kappa_0A_1-|P|A_0)-L(\kappa_0A_2-|P|A_1)\big)
+\]
+are polynomials in $\zeta-m$ with rational coefficients, and by Lemma~\ref{lem:LG}:
+\begin{equation}\label{eq:box}
+\det\nolimits_k>0\ (\forall k),\quad P_D>0,\quad P_C(L)>0\quad\text{on }X\qquad\Longrightarrow\qquad F(P(\zeta))>L\ \text{ for all }\zeta\in X ,
+\end{equation}
+provided that some $P(\zeta_0)$, $\zeta_0\in X$, is a simple polygon (so that the winding number is $1$); in
+particular $F(P(\zeta))>L$ for every member of $X$ that is itself a simple polygon whose fan about $O$ has winding
+number $1$, for instance a strictly convex polygon with $O$ in its interior.
+\begin{lemma}[positivity on a box]\label{lem:pos}
+Let $p(x)=p_0+g\cdot x+\frac12x^THx+\sum_{|\alpha|\ge3}p_\alpha x^\alpha$ and $\mu\in\R^n_{\ge0}$ with
+$A=H+2\,\mathrm{diag}(\mu)$ positive definite. Then for $|x_i|\le\rho_i$:
+$p(x)\ge p_0-\frac12g^TA^{-1}g-\sum_i\mu_i\rho_i^2-\sum_{|\alpha|\ge3}|p_\alpha|\rho^\alpha$.
+\end{lemma}
+\begin{proof}
+$g\cdot x+\frac12x^THx=g\cdot x+\frac12x^TAx-\sum\mu_ix_i^2\ge-\frac12g^TA^{-1}g-\sum\mu_i\rho_i^2$.
+\end{proof}
+The multipliers $\mu$ come from floating point; positive definiteness is verified by an exact $LDL^T$ factorisation.
+If the test fails, the box is bisected and the polynomials are re-expanded at the new centres (exact Taylor shift).
+
+\section*{Part I: the neighbourhood of the regular pentagon (Theorem~\ref{thm:L})}
+In this part $P(z)$ is the pentagon chart, $d=z-c$, and the fan has the five vertices of $P(z)$.
+
+\section{The family: exact at the regular pentagon}\label{sec:family}
+Let $u_0$ be a first eigenfunction of $P(c)$, $\lambda_0=\lambda_1(P(c))$, $h_0=(2+E)^{-1}u_0$, and $\chi_0\in H^1$
+with $\curl\chi_0=\nabla u_0/\lambda_0+(p-O)h_0$ on $P(c)$ (the right side is a divergence-free $L^2$ field on a
+simply connected Lipschitz domain); equivalently $\s_c(u_0,\chi_0)=\M_c\gr u_0/\lambda_0$. Let $U_1,\dots,U_6$ be
+continuous piecewise polynomials on the fan vanishing on the boundary, and $X_1,\dots,X_6$ continuous piecewise
+polynomials. With $d=z-c$,
+\[
+v_z=u_0+\sum_id_iU_i,\qquad\chi_z=\chi_0+\sum_id_iX_i,\qquad\s_z=\s_z(v_z,\chi_z).
+\]
+Transplanted to $P(z)$, $(v_z,\s_z)$ is admissible in Lemma~\ref{lem:LG}. Let $|P|=|P(z)|$, $F_0=\lambda_0|P(c)|$,
+\begin{align*}
+\B_z\big((v,\s),(v',\s')\big)&=|P|(\kappa_0+F_0)\,b_z(v,v')-|P|^2a_z(v,v')-F_0\kappa_0\,c_z(\s,\s'),\\
+\Psi(z)&=\B_z\big((v_z,\s_z),(v_z,\s_z)\big).
+\end{align*}
+If $\kappa_0b_z(v_z,v_z)>|P|a_z(v_z,v_z)$, Lemma~\ref{lem:LG} with $\nu=\kappa_0/|P|$ gives
+\begin{equation}\label{eq:main}
+F(P(z))-F_0\ \ge\ \frac{\Psi(z)}{\kappa_0c_z(\s_z,\s_z)-|P|\,b_z(v_z,v_z)},\qquad\text{denominator}>0 .
+\end{equation}
+At $z=c$: $a_c=\lambda_0b_c$ and $c_c(\s_c,\s_c)=b_c/\lambda_0$, so $\Psi(c)=b_c\,[\,|P|(\kappa_0+F_0)-|P|^2\lambda_0-
+F_0\kappa_0/\lambda_0]=0$.
+
+\begin{lemma}\label{lem:S}
+$\nabla\Psi(c)=0$.
+\end{lemma}
+\begin{proof}
+Let $L(z)=F_0+\Psi(z)/(\kappa_0c_z(\s_z,\s_z)-|P|b_z(v_z,v_z))$ and $U(z)=|P(z)|\,a_z(u_0,u_0)/b_z(u_0,u_0)$, the Rayleigh
+quotient of the transplanted $u_0$. Both are rational functions of $z$ with fixed integrals as coefficients, smooth
+near $c$, and $L\le F\le U$ near $c$ by \eqref{eq:main} and Rayleigh's principle, with $L(c)=U(c)=F_0$ (the hypothesis
+of \eqref{eq:main} holds at $c$ because $\kappa_0>F_0$, hence in a neighbourhood). Let
+$\varphi_g$, $g\in D_5$, be the ten relabelling maps of the chart: they are smooth near $c$, $\varphi_g(c)=c$ and
+$F\circ\varphi_g=F$. Hence $L\le F\circ\varphi_g\le U\circ\varphi_g$ for every $g$, and averaging,
+$L(z)-F_0\le\nabla U(c)\,M\,(z-c)+O(|z-c|^2)$ with $M=\frac1{10}\sum_gD\varphi_g(c)$. The matrices $D\varphi_g(c)$ form a
+representation of $D_5$ and $M$ is the projection onto its fixed vectors; a computation in ball arithmetic gives
+$\|M\|_\infty<10^{-100}<1$, hence $M=0$. (Alternatively: the tangent representation is $\rho_1\oplus2\rho_2$, without
+trivial component.) So $\nabla L(c)\cdot(z-c)\le O(|z-c|^2)$ for all $z$, i.e.\ $\nabla L(c)=0$, and
+$\nabla\Psi(c)=(\text{denominator at }c)\,\nabla L(c)=0$.
+\end{proof}
+No differentiability of $F$ is used. Consequently
+\[
+Q(d):=\Big(\prod_k\det\nolimits_k(c+d)\Big)\,\Psi(c+d)
+\]
+is a polynomial in $d$ \emph{without constant and linear terms}, and by \eqref{eq:main} Theorem~\ref{thm:L} follows
+from: (i) $\det_k>0$; (ii) $\kappa_0b_z(v_z,v_z)>|P|a_z(v_z,v_z)$; (iii) $Q(d)>0$; for $0<|d|_2<R$.
+
+\section{The residual form}
+Let $\tilde u_0,\tilde\chi_0$ be computed piecewise polynomial approximations of $u_0,\chi_0$,
+$\tilde v_z=\tilde u_0+\sum d_iU_i$, $\tilde\chi_z=\tilde\chi_0+\sum d_iX_i$, $\tilde\s_z=\s_z(\tilde v_z,\tilde\chi_z)$,
+$\tilde\Psi(z)=\B_z$ of the computed pair with itself. Let $e=\tilde u_0-u_0\in H^1_0$, $e_h=(2+E)^{-1}e$,
+$\hat\lambda(z)=F_0/|P(z)|$ and
+\[
+\rho_z=\N_z\tilde\s_z-\gr\tilde v_z/\hat\lambda(z)
+\]
+(the pull-back of $w-\nabla u/\hat\lambda$ for the computed pair; $\rho_c$ is the residual at $c$).
+\begin{proposition}\label{prop:R}
+$\displaystyle\Psi(z)=K(z)+\sum_k\int\gr e\cdot\Lambda_z+\sum_k\int e_h\,(a,b)\cdot\Theta_z+q_z(e,e)$, where
+\begin{align*}
+K&=\tilde\Psi+2F_0\kappa_0\sum_k\!\int\rho_z\cdot\M_c\rho_c-F_0\kappa_0\sum_k\!\int(\M_c\rho_c)\cdot\N_z(\M_c\rho_c),\\
+\Lambda_z&=2F_0\big[(\kappa_0/\lambda_0)\,\M_c\rho_z-|P(z)|\,\M_z\rho_z-(\kappa_0/\lambda_0)\,\M_c\N_z\M_c\rho_c\big],\\
+\Theta_z&=-2F_0\kappa_0\,(\det\nolimits_k(z)-\det\nolimits_k(c))\,\big[\rho_z-\N_z\M_c\rho_c\big],\\
+q_z(e,e)&=|P|(\kappa_0+F_0)\,b_z(e,e)-|P|^2a_z(e,e)-F_0\kappa_0\,c_z(\tf',\tf'),\\
+\tf'&=\M_c\gr e/\lambda_0-(\det\nolimits_k(z)-\det\nolimits_k(c))\,(a,b)\,e_h .
+\end{align*}
+\end{proposition}
+\begin{proof}
+The true pair is the computed pair minus $(e,\tf_z)$, $\tf_z=\tilde\s_z-\s_z=\s_z(e,e_\chi)$ with
+$e_\chi=\tilde\chi_0-\chi_0$ (the terms with $U_i,X_i$ cancel). At $c$: $\tf_c=\tilde\s_c-\M_c\gr u_0/\lambda_0=
+\M_c(\rho_c+\gr e/\lambda_0)$, and $\tf_z=\tf_c-(\det_k(z)-\det_k(c))(a,b)e_h$. Thus
+$\Psi=\tilde\Psi-2\B_z((\tilde v,\tilde\s),(e,\tf_z))+\B_z((e,\tf_z),(e,\tf_z))$. By the definition of $\rho_z$,
+$c_z(\tilde\s,\tf_z)=\sum\!\int\rho_z\cdot\tf_z+\hat\lambda^{-1}\sum\!\int\gr\tilde v\cdot\tf_z$, and
+$\sum\!\int\gr\tilde v\cdot\tf_z=b_z(\tilde v,e)$ by \eqref{eq:IP} for the pair $(e,e_\chi)$. Also
+$\gr\tilde v=\hat\lambda(\N_z\tilde\s-\rho_z)$, so $a_z(\tilde v,e)=\hat\lambda\sum\!\int\tilde\s\cdot\gr e-
+\hat\lambda\sum\!\int\rho_z\cdot\M_z\gr e=\hat\lambda b_z(\tilde v,e)-\hat\lambda\sum\!\int\rho_z\cdot\M_z\gr e$ by
+\eqref{eq:IP} for the computed pair. With $|P|^2\hat\lambda=|P|F_0$ and $F_0\kappa_0/\hat\lambda=\kappa_0|P|$ the four
+terms with $b_z(\tilde v,e)$ cancel:
+\[
+\B_z\big((\tilde v,\tilde\s),(e,\tf_z)\big)=F_0|P|\sum_k\!\int\rho_z\cdot\M_z\gr e-F_0\kappa_0\sum_k\!\int\rho_z\cdot\tf_z .
+\]
+Insert $\tf_z=\M_c\rho_c+\tf'$, expand $c_z(\tf_z,\tf_z)$, and collect the terms without $e$, linear and quadratic in $e$.
+\end{proof}
+The point of the proposition: a term-by-term estimate of the error of $\Psi$ is useless (the individual terms are of
+size $(\kappa_0+F_0)|P|A_1$ and the smallest eigenvalue of the quadratic form to be protected is $0.52$ in units of
+$F$), whereas here $e$ is paired only with fields built from $\rho$, which are small.
+
+\section{Bounds for the unknown function}
+Normalise $u_0$ as the $L^2(P(c))$ projection of $\tilde u_0$ on the first eigenspace. Then $e\perp u_0$,
+$\|\nabla e\|^2-\lambda_0\|e\|^2=A_0-\lambda_0A_1$ ($A_i$: the forms of the computed pair at $c$) and
+$\|\nabla e\|^2\ge\lambda_2\|e\|^2\ge\nu\|e\|^2$, so with $\lambda_{lo}\le\lambda_0\le\lambda_{up}=A_0/A_1$
+($\lambda_{lo}$ from Lemma~\ref{lem:LG} at $c$)
+\[
+\varepsilon_1^2:=\|\nabla e\|^2_{L^2(P(c))}\le\frac{A_0-\lambda_{lo}A_1}{1-\lambda_{up}/\nu},\qquad
+\varepsilon_0^2:=\|e\|^2\le\varepsilon_1^2/\nu .
+\]
+On every reference triangle $\int(a+b)^2e_h^2\le\frac14\int e^2$ (in the coordinates $s=a+b$, $\theta=a/s$:
+$da\,db=s\,ds\,d\theta$, $e_h=s^{-2}\int_0^st\,e\,dt$, Cauchy--Schwarz). With degree $16$:
+$\varepsilon_1\le1.02\cdot10^{-3}$ ($4.6\cdot10^{-4}$ of $\|\nabla\tilde u_0\|$), $\varepsilon_0\le2.3\cdot10^{-4}$.
+
+\section{Enclosure of the coefficients}
+Everything is multiplied by $\D(z)=\prod_k\det_k(z)$ and expanded in $d'=z-C_q$, $C_q$ a rational point with
+$|c-C_q|_\infty\le2^{-50}$. Polynomial arithmetic is exact (FLINT \cite{flint}); quantities that are irrational or not
+known exactly are carried as polynomials with a coefficientwise radius: $F_0$ and $\lambda_0$ (with rigorous interval enclosures recorded in \texttt{constants.json}; the enclosure of $F_0$
+has width about $1.9\cdot10^{-6}$), the
+geometry of $P(c)$, the weights $d'_i-(c-C_q)_i$ of the lists, and $\rho_c$. The coefficient fields of $\D\Lambda_z$
+and $\D\Theta_z$ lie in the span of the $6\cdot7$ functions $a\,h_b,\ b\,h_b,\ \partial_a\chi_b,\ \partial_b\chi_b,\
+\partial_aU_b,\ \partial_bU_b$ ($b=0,\dots,6$) per triangle, whose Gram matrices are exact rationals. For the
+coefficient of $d'^\alpha$,
+\[
+\Big|\sum_k\!\int\gr e\cdot\Lambda_\alpha+\sum_k\!\int e_h(a,b)\cdot\Theta_\alpha\Big|\le
+\varepsilon_1\Big(\sum_k\!\int\Lambda_\alpha\cdot\N_c\Lambda_\alpha\Big)^{1/2}+
+\frac{\varepsilon_0}2\Big(\sum_k\!\int\frac{|\Theta_\alpha|^2}{\det_k(c)}\Big)^{1/2},
+\]
+computed exactly for $|\alpha|\le3$ and replaced by a cruder majorant for higher degrees; $q_z(e,e)$ is bounded by a
+majorant with $\varepsilon_0^2,\varepsilon_1^2$; the Taylor shift from $C_q$ to $c$ changes a coefficient by at most
+$(2^{-50}/2^{-10})\,[B(d+2^{-10}\mathbf 1)-B(d)]_\alpha$ for any coefficientwise majorant $B$. The result is
+$Q(d)=\sum_{|\alpha|\ge2}s_\alpha d^\alpha$ with $s_\alpha\in[T_\alpha-E_\alpha,T_\alpha+E_\alpha]$, $T_\alpha,E_\alpha$
+rational ($12{,}968$ and $13{,}024$ numbers). The computed coefficients of degree $0$ and $1$ are discarded: the true ones
+vanish by Section~\ref{sec:family}. (They lie within their error bounds, as they must.)
+
+\section{Positivity}
+\emph{Inner cube $|d_i|\le\rho=1/128$.} Write $Q(d)=d^T[\frac12H+\sum_id_iT_i]d+\text{rest}$ with $H$, $T$ from
+$T_\alpha$, $|\alpha|=2,3$, and $|\text{rest}|\le\tau|d|^2$, $\tau=\tau_2+\tau_3+\tau_4$:
+$\tau_2=\max_i[E_{2e_i}+\frac12\sum_{j\ne i}E_{e_i+e_j}]$, $\tau_3=\rho\sum_{|\alpha|=3}E_\alpha w_\alpha$,
+$\tau_4=\sum_{|\alpha|\ge4}\rho^{|\alpha|-2}(|T_\alpha|+E_\alpha)w_\alpha$ ($w_\alpha=1$ for pure powers, $\frac12$
+otherwise). The matrix $\frac12H+\sum d_iT_i-\tau I$ is affine in $d$, so it is positive definite on the cube if it is
+at the $64$ vertices (exact $LDL^T$). In units of $F$ (that is, $Q$ divided by its normalising factor
+$\D(c)\,(\kappa_0c_c(\s_c,\s_c)-|P(c)|\,b_c(v_c,v_c))\approx0.109$; the certificate stores $Q$ itself): the eigenvalues
+of $H$ are $0.525,\,0.557,\,5.03,\,5.70,\,12.76,\,15.31$; $\tau=0.165$ ($0.057+0.013+0.095$); the smallest pivot is
+$0.32$ (in the units of the certificate: $\tau=0.01806$, smallest pivot $0.03492$).
+
+\emph{Shell.} The half cube $\{|d_i|\le W,\ d_3\ge0\}$ is bisected into $7{,}939$ boxes $m\pm r$: $32$ inside the
+inner cube, $965$ with $\sum_i\max(|m_i|-r_i,0)^2\ge R^2$, and $6{,}942$ on which
+$p(x)=\sum_{2\le|\alpha|\le6}T_\alpha(m+x)^\alpha$ satisfies $\min_{|x_i|\le r_i}p>\sum_\alpha E'_\alpha\prod_i
+(|m_i|+r_i)^{\alpha_i}$ ($E'=E$ plus $|T_\alpha|$ for $|\alpha|>6$), proved by: constant term, exact Lagrangian bound of
+the linear and quadratic terms ($-\frac12g^TA^{-1}g-\sum\mu_ir_i^2$ with multipliers $\mu_i\ge0$ and $A=H_p+2\,\mathrm{diag}(\mu)$ positive
+definite; both are checked),
+and the sum of the absolute values of the higher terms. All of this is exact rational arithmetic. The other half
+follows from the reflection $(z_1,\dots,z_6)\mapsto(1-z_5,z_6,1-z_3,z_4,1-z_1,z_2)$, an isometry of the chart that fixes
+$c$ and preserves $F$.
+
+\section{Side conditions}\label{sec:side}
+On the cube of half-width $W$: $\det_k>0$ by an exact polynomial test; and
+$\kappa_0b_z(v)-|P|a_z(v)\ge(\kappa_0b_z(\tilde v)-|P|a_z(\tilde v))-2\kappa_0(b_z(\tilde v)b_z(e))^{1/2}-
+|P|(2(a_z(\tilde v)a_z(e))^{1/2}+a_z(e))$ with $b_z(e)\le2\varepsilon_0^2$, $a_z(e)\le2\varepsilon_1^2$
+($\det_k(z)\le2\det_k(c)$, $\M_z\preceq2\M_c$ on the cube), which is proved positive on the whole cube by an exact polynomial test (the allowance is less than $0.032$; at the
+centre the main term is about $7.776$).
+
+\section*{Part II: the annulus (Theorem~\ref{thm:N})}
+\section{The near cover}\label{sec:near}
+The map $m(z)=(1-z_5,z_6,1-z_3,z_4,1-z_1,z_2)$ is an isometry of $\R^6$ with $m(C)=C$ exactly, and $P(m(z))$ is the
+mirror image of $P(z)$ with the vertices relabelled; so it suffices to prove the theorem for $z_3\ge\frac12$. Let $K_0$
+be the cube with centre $C$ rounded to multiples of $2^{-10}$ and half-width $\frac58$; it contains the ball
+$|z-C|<\frac35$, and the plane $z_3=\frac12$ is a plane of its dyadic grid. $K_0$ is bisected into boxes with dyadic
+ends; a box $[\mathrm{lo},\mathrm{hi}]$ becomes a leaf with the first applicable label:
+\emph{mirror}, if $\mathrm{hi}_3\le\frac12$; \emph{far}, if $\inf_{\rm box}|z-C|^2\ge\frac9{25}$; \emph{inner}, if
+$\sup_{\rm box}|z-C|^2<\frac1{400}$; \emph{LG}, if \eqref{eq:box} holds on the box with $L=F^*$ for the vertex map
+$\zeta=z$ (the vertices are the parameters; $P_D$ and $P_C$ have degree $13$ and about $13{,}000$ terms). The infimum
+and supremum of $|z-C|^2$ over a box are exact rational numbers.
+
+\begin{proof}[Proof of Theorem~\ref{thm:N} from a complete cover]
+Let $\frac1{20}\le|z-C|<\frac35$ and, after applying $m$ if necessary, $z_3\ge\frac12$. Then $z$ lies in a closed leaf
+with $\mathrm{lo}_3\ge\frac12$; such a leaf is not \emph{mirror}, and it is neither \emph{far} nor \emph{inner} because
+it contains $z$. So it is an LG leaf. $P(z)$ is simple: in the regular pentagon $P(c)$ (unit edges) two distinct
+vertices, two non-adjacent edges, and a vertex and an edge not containing it are at distance at least $1$ (the vertex
+angles are obtuse, and the distance to the opposite edge exceeds $1$). Moving the endpoints of a segment by at most $a$
+moves the segment by at most $a$ in Hausdorff distance. In each of the three cases the two objects use disjoint sets of
+the moving vertices $V_2,V_3,V_4$, whose displacements $a,b$ satisfy $a+b\le\sqrt2\,|z-c|<0.85<1$, so the three
+distances stay positive. Two adjacent edges meeting in a further point would overlap on their common line, which puts
+an endpoint of one of them on the other, at distance $0$ from an edge not containing it; this is excluded. The fan
+determinants are positive on the whole leaf, so the winding number about the fan centre $O$ is constant on the leaf; at
+$z$ it is $1$ because $P(z)$ is simple. So $P(z)$ is star-shaped about the interior point $O$, the fan triangles tile it,
+and \eqref{eq:box} gives $F(P(z))>F^*$. (Nothing is claimed for members of the leaf outside the annulus.)
+\end{proof}
+The cover has $51{,}434$ leaves ($38{,}280$ LG, $13{,}118$ far, $36$ inner) in $1{,}344$ stored blocks of side
+$\frac5{16}$; the half-widths of the LG leaves are $20$--$40\,\%$ of the distance to $C$.
+
+\section*{Part III: far from the regular pentagon (Theorem~\ref{thm:F})}
+\section{The cut chart}\label{sec:cut}
+Let $P$ be a strictly convex pentagon, counter-clockwise, $e_i=V_{i+1}-V_i$, and for an edge $k$:
+$A_k=e_{k-1}\times e_k>0$, $B_k=e_k\times e_{k+1}>0$, $C_k=e_{k-1}\times e_{k+1}$. If $C_k>0$, the lines of the edges $k\mp1$
+meet beyond the edge $k$ in a point $W$; the triangle $(V_k,W,V_{k+1})$ (the \emph{ear} of $k$) has area
+$\mathrm{ear}_k=A_kB_k/(2C_k)$, and $Q_k=P\cup\mathrm{ear}$ is a strictly convex quadrilateral. Some edge has $C_k>0$: the
+exterior angles sum to $2\pi$, so two consecutive ones sum to less than $\pi$. Since $P\subset Q_k$,
+\begin{equation}\label{eq:F1}
+F(P)\ \ge\ F(Q_k)\,|P|/|Q_k| .
+\end{equation}
+Call $k$ \emph{kept} if $C_k>0$ and $\mathrm{ear}_k\le\mathrm{ear}_{k'}$ for all $k'$ with $C_{k'}>0$; every $P$ has a kept
+edge.
+
+\paragraph{Coordinates.} Normalise $Q=Q_k$ by a similarity, and a reflection if necessary, to
+$Q(q)=(q_0,q_1,q_2,q_3)$, $q_0=0$, $q_1=(1,0)$, $q=(q_2,q_3)\in\R^4$, such that $q_0q_1$ is a longest edge and $W=q_j$ with
+$j\in\{3,0\}$. With $t,u\in(0,1)$ the fractions of the two edges at $W$ that are cut away,
+\[
+j=3:\ P=[q_0,\,q_1,\,q_2,\,q_3+t(q_2-q_3),\,(1-u)q_3],\qquad j=0:\ P=[(t,0),\,q_1,\,q_2,\,q_3,\,u\,q_3],
+\]
+and $|P|=|Q|(1-tu\,\tau_j(q))$ with $\tau_j$ the area of the corner triangle at $q_j$ divided by $|Q|$. Call $q$
+\emph{admissible} if $Q(q)$ is strictly convex and its edges other than the base have length $\le1$; then
+$q\in\mathfrak B=[0,2]\times[0,1]\times[-1,1]\times[0,1]$. So every strictly convex pentagon is, up to similarity and
+reflection, $P(q,t,u;j)$ with $q$ admissible, $t,u\in(0,1)$, $j\in\{3,0\}$ and the cut edge kept.
+
+\paragraph{Invariants.} With the edge vectors $e_0=(1,0)$, $e_1=q_2-q_1$, $e_2=q_3-q_2$, $e_3=-q_3$ of $Q$:
+$q_{3y}=e_3\times e_0$, $q_{2y}=e_0\times e_1$, $K=e_1\times e_2$, $D=e_2\times e_3$, $M=e_3\times e_1$, $L=e_0\times e_2$,
+$2|Q|=q_{2y}+D$; $Q$ is strictly convex iff $q_{2y},K,D,q_{3y}>0$; $\tau_3=D/(q_{2y}+D)$, $\tau_0=q_{3y}/(q_{2y}+D)$.
+
+\paragraph{Three charts and the corner principle.} std: $w=q$. E2: $w=(q_{3x},q_{3y},a,h)$, $q_2=q_1+a(q_3-q_1)+h(0,1)$,
+so that $K=h(1-q_{3x})$. E3: $w=(q_{2x},q_{2y},b,h)$, $q_3=b\,q_2+h(0,1)$, so that $D=h\,q_{2x}$. Put $\zeta=(w,t,u)$. In
+each chart every vertex of $P$ is multi-affine in $\zeta$, and each coordinate moves all vertices along one common
+direction. Hence every cross product of two vertex differences is multi-affine in $\zeta$ (its second derivative in
+$\zeta_m$ is $2\,\partial_mv\times\partial_mv'=0$), and so are the area and all linear functionals of the vertices.
+A multi-affine function on a box attains its extreme values at the corners. All box criteria below evaluate such
+functions at the $64$ (or $16$) corners, where the vertices are exact dyadic rationals.
+
+\section{Leaves and their labels}\label{sec:labels}
+\paragraph{Domains.} The std roots are the cells of side $\frac1{16}$ of $\mathfrak B$, except those where one of
+$q_{2y},q_{3y},K,D$ is $\le0$ at all $16$ corners (no strictly convex $Q$) or where an edge other than the base is longer
+than $1$ on the whole cell ($57{,}093$ roots). A $q$-box of the std chart is handed over to E2 if $q_{3y}\ge\frac14$ on
+it and $K<\frac18(1-q_{3x})$ at its corners, to E3 if $q_{2x}\ge\frac14$ and $D<\frac18q_{2x}$. For an admissible strictly
+convex $q$ of such a box, $h=K/(1-q_{3x})\in(0,\frac18)$ and $a(q_3-q_1)=e_1-h(0,1)$, $|q_3-q_1|\ge\frac14$, give
+$|a|\le4.5$; resp.\ $h=D/q_{2x}\in(0,\frac18)$, $b=q_{3x}/q_{2x}$, $|b|\le4$. The E2 roots are the cells of
+$[-1,1]\times[\frac14,1]\times[-4.5,4.5]\times[0,\frac18]$ that may contain a strictly convex $Q$ ($15{,}646$), the E3
+roots those of $[\frac14,2]\times[0,1]\times[-4,4]\times[0,\frac18]$ ($25{,}660$). For every root $c$ and $j\in\{3,0\}$
+the column $c\times[0,1]^2$ is bisected into leaves.
+
+\paragraph{The quadrilateral bound.} For a $w$-box let $\mathrm{LB}$ be the largest of the following lower bounds of
+$F(Q)$ over its strictly convex members: $2\pi^2$ \cite{ps}; for an edge $k$ of $Q$ with $C_k>0$ on the box,
+$(4\pi^2/\sqrt3)/(1+\mathrm{ear}_k/|Q|)$ ($Q$ lies in the triangle of the other three edge lines, and
+$F\ge4\pi^2/\sqrt3$ for triangles \cite{ps}); the strip bounds $\pi^2|Q|/w^2$ and $\pi^2/(2w)$, $w=\max(q_{2y},q_{3y})$;
+Makai's bound $\pi^2\mathrm{Per}^2/(16|Q|)$ \cite{makai} (std chart); the fibre bound (Lemma~\ref{lem:OD}) of the convex
+hull of the corner quadrilaterals times the smallest corner area; and, in the std chart, a table value of the root
+cell: for the cell or each of its $16$ sub-cells with strictly convex members, a closed-form bound or a number $L$ for
+which \eqref{eq:box} holds on the (sub-)cell for the quadrilateral chart.
+
+\paragraph{Labels.} Each label is an assertion about the members of the box with $Q(w)$ strictly convex and
+$t,u\in(0,1)$.
+The criteria are proved in Appendix~\ref{app:far}.
+\begin{itemize}\setlength\itemsep{1pt}
+\item[V:] no member. An invariant $q_{2y},q_{3y},K$ or $D$ is $\le0$ at the $16$ corners.
+\item[E2, E3:] (std) handed over, see above.
+\item[T:] $F(P)>F^*$. The certified quadrilateral bound satisfies $\mathrm{LB}>F^*$, the upper bound of $\tau_j$ is positive, and
+$\sup t\cdot\sup u<\theta_T:=(1-F^*/\mathrm{LB})/\sup\tau_j$; then
+$F(P)\ge\mathrm{LB}\,(1-tu\tau_j)>F^*$ by \eqref{eq:F1}.
+\item[X:] the cut edge is not kept: another edge $k'$ has $C_{k'}>0$ and $\mathrm{ear}_{k'}<\mathrm{ear}_{\rm cut}$ on the
+box. For the two edges not touched by the cut this reads $tu>g(w)$, namely
+($j=3$) $k'=0$: $M>0$, $g=q_{2y}q_{3y}/(DM)$; $k'=1$: $L>0$, $g=q_{2y}K/(LD)$;
+($j=0$) $k'=1$: $L>0$, $g=q_{2y}K/(q_{3y}L)$; $k'=2$: $M<0$, $g=DK/(q_{3y}(-M))$.
+For the two shortened edges it reads $C'>0$, $G<0$ with
+($j=3$) $(C',G)=(u\,q_{3y}+t(q_{2y}-q_{3y}),\ q_{3y}(1-2u)-tu(q_{2y}-q_{3y}))$ and $(tK-uM,\ K(1-2t)+tuM)$;
+($j=0$) $(uM+t\,q_{2y},\ q_{2y}(1-2t)-tuM)$ and $(uD+t(q_{2y}-q_{3y}),\ D(1-2u)-tu(q_{2y}-q_{3y}))$;
+these are multi-affine in $\zeta$. The denominators of $g$ are certified positive on the box after the indicated sign
+choices. In the chart E3 at the face $q_{2y}=0=h$ (where all five vertices can collapse to
+one point) the first group is homogeneous in $(q_{2y},h)$ and is verified for all ratios $h/q_{2y}\in(0,\infty)$.
+\item[TX:] (whole column) the strict separation $\theta_T>\sup g$ (with the positivity assumptions of T and of X): a member with
+$tu<\theta_T$ has $F(P)>F^*$, a member with $tu\ge\theta_T>g$ is not kept.
+\item[S:] $F(P)>F^*$ by a strip bound: (a) for a non-zero vector $n$ let $W_n=\max_{i,k}|\langle V_i-V_k,n\rangle|$, so
+that $P$ lies in a strip of width $W_n/|n|$; if $|P|\ge\tau W_n^2/|n|^2$ on the box (certified for every vertex pair from
+the corners, the function $|P|-\tau|n|^{-2}\langle V_i-V_k,n\rangle^2$ being concave in each coordinate) and
+$\pi^2\tau>F^*$, then $F(P)\ge\pi^2\tau>F^*$ (Appendix~\ref{app:far}); (b) for an edge of length $l>0$ with $\max_kc_k>0$,
+$F\ge\pi^2l^2/(2\max_kc_k)$, $c_k=(V_b-V_a)\times(V_k-V_a)$ ($P$ lies in a strip of width $H=\max_kc_k/l$ and contains a
+triangle of area $lH/2$), and the label requires the verified lower bound to be strictly greater than $F^*$.
+\item[R:] $F(P)>F^*$: for two non-adjacent edges $m,m+2$ with $C_m>0$ and $C_{m+2}>0$, $P$ lies in the triangle $T$ of the other three
+edge lines, $|T|=|P|+\mathrm{ear}_m+\mathrm{ear}_{m+2}$, and $F(P)\ge(4\pi^2/\sqrt3)\,|P|/|T|$; the label requires this
+verified lower bound to be strictly greater than $F^*$.
+\item[O:] $F(P)>F^*$ by the fibre bound of the convex hull of the $320$ corner vertices (which contains $P(\zeta)$)
+times the smallest corner area; the label requires this verified lower bound to be strictly greater than $F^*$.
+\item[N:] $d(P)<\frac35$. For a labelling $h$ the chart coordinates are $u_p=N_p/D$ with $N_p=W_p-W_0$, $D=W_1-W_0$
+complex multi-affine; with $r_p$ the value of $u_p$ at the centre, $|u_p-r_p|\le\rho_p:=\max_{\rm corners}|N_p-r_pD|/
+\min_{\rm corners}\mathrm{Re}(D\bar e)$ for a unit vector $e$ (the denominator certified strictly positive), and the test
+is $\sum_p(|r_p-C_p|+\rho_p)^2<\frac9{25}$ with outward rounding, $C_p$ the complex pair of $C$ that belongs to the
+labelling.
+\item[C:] $F(P)>F^*$: \eqref{eq:box} holds on the box with $L=F^*$ for the vertex map of the chart ($P_C$ has degree
+up to $20$ and up to $41{,}000$ terms).
+\end{itemize}
+
+\begin{lemma}[fibre bound]\label{lem:OD}
+Let $P$ be a bounded convex domain, $(a,b)$ its projection to the $x$-axis and $w(x)$ the length of its section at
+$x$. Then $\lambda_1(P)\ge\mu:=\inf\{\int_a^b(f'^2+Vf^2):f\in C_c^\infty(a,b),\int f^2=1\}$ with $V=\pi^2/w^2$. If $V_t\le V$
+is piecewise constant and there is $\varphi\in C^1[a,b]$, piecewise $C^2$, positive on $(a,b)$, with
+$-\varphi''+V_t\varphi=m\varphi$ on every piece, then $\mu\ge m$.
+\end{lemma}
+\begin{proof}
+For $u\in C_c^\infty(P)$, by Fubini and the one-dimensional Dirichlet inequality on every vertical section,
+$\int|\nabla u|^2\ge\int\!\!\int(u_x^2+V(x)u^2)\,dx\,dy$; for fixed $y$ the horizontal slice of $u$, extended by zero,
+lies in $C_c^\infty(a,b)$, so the inner integral is at least $\mu\int u^2\,dx$. For the second claim let $f\in
+C_c^\infty(a,b)$ and $v=f/\varphi$, which has compact support in $(a,b)$ because $\varphi>0$ there; since $\varphi$ is
+$C^1$ (values and derivatives match at the nodes), integration by parts on every piece leaves no boundary terms and
+gives $\int(f'^2+V_tf^2)=\int\varphi^2v'^2+m\int f^2\ge m\int f^2$; and $V\ge V_t$.
+\end{proof}
+In the computation $w$ is bounded above on each of $128$ intervals by differences of edge lines, and $\varphi$ is
+propagated by the explicit solution formulas in ball arithmetic; its positivity is certified on every open piece, not
+only at the nodes (a hyperbolic or affine piece has at most one zero, so positive values at both ends suffice; a
+trigonometric piece is in addition shorter than half a period). The independent re-certification uses its own routes
+for these labels, listed with their conditions in the second party's \texttt{LABEL\_ROUTES.md}.
+
+\section{The cover argument}\label{sec:cover}
+\begin{proof}[Proof of Theorem~\ref{thm:F} from a complete cover]
+Let $P$ be strictly convex with a kept edge and coordinates $(q,t,u;j)$, $q$ admissible. The cell of $\mathfrak B$
+containing $q$ is a std root, so $(q,t,u)$ lies in a leaf of its column for $j$. If the leaf is E2 (E3), the edge-chart
+coordinates of $q$ lie in the root range of that chart and in a root, and we pass to a leaf of that column. The leaf is
+not V, because $Q(q)$ is strictly convex, and not X, because the cut edge is kept and X asserts a strictly smaller ear;
+for the same reason the second alternative of TX is excluded. Hence the label is T, TX, S, R, O or C, and $F(P)>F^*$,
+or it is N, and $d(P)<\frac35$.
+\end{proof}
+
+\section{Computations, verification and status}\label{sec:status}
+\emph{(Status on 27 November 2026.)}
+\begin{center}\small
+\begin{tabular}{@{}lp{3.1cm}p{3.6cm}p{5.8cm}@{}}\toprule
+part & computation & second computer & second-party review\\\midrule
+Thm.~\ref{thm:L} & done ($6$ minutes) & yes, identical leaf list & passed in full: analysis; final positivity proof replayed independently; all $13{,}024$ coefficient enclosures recomputed independently and the positivity proof re-proved with them\\
+Thm.~\ref{thm:N} & done & yes, self-check passed & certificate formulas, simplicity argument, mirror, skip tests and cover argument passed; structure of all blocks re-checked independently; an independently written exact certificate program re-proved all $38{,}280$ near targets and its stored witnesses were replayed; signed (PENT-26, 2026-11-28)\\
+Thm.~\ref{thm:F} & done ($1{,}260$ blocks, $116$ CPU hours, no unresolved leaf) & $225$ blocks recomputed with matching results; root ranges, tiling and every closed-form label of the full run re-proved by a second implementation & Lemma~\ref{lem:LG}, \eqref{eq:box}, chart, kept representation, corner principle, ear comparisons and cover argument passed; the structure of the whole cover re-checked independently; an independently written exact program re-proved all $377{,}515$ certified boxes, $185{,}100$ table entries and $1{,}346{,}929$ labels, and its stored witnesses were replayed; signed (PENT-26, 2026-11-28)\\\bottomrule
+\end{tabular}\end{center}
+\noindent\textbf{The three computations are complete, have passed the producer-side checks, and were re-certified in full
+by the second party's independently written programs; Theorem~\ref{thm:main} is signed by the second party (PENT-26, 2026-11-28).
+It remains a computer-assisted proof candidate: it has not been peer reviewed, and the mathematics has not been
+reviewed by human experts.}
+The far cover consists of $1{,}724{,}444$ boxes: $377{,}515$ certified by \eqref{eq:box} and $1{,}346{,}929$ leaves with
+closed-form labels. A second implementation written from the statement of the criteria re-proves every one of these
+labels in exact rational arithmetic ($13$ of them only after one bisection of all six coordinates, because its
+quadrilateral bounds are weaker than the producer's); the producer-side checks of the certified boxes and of the table
+are described below. Producer-side replay of the certified boxes has the scope listed in the accompanying
+manifest: the certified boxes of $6$ std blocks ($1{,}538$ boxes) were checked by sampling only. The independent full
+re-certification is described below.
+
+Producer-side checks (the same programs as the producer, run again; not a second implementation).
+Theorem~\ref{thm:L}: a checker using the Python standard library only re-proves the final positivity statement from the
+exported coefficients and boxes. Near: the stored blocks are re-enumerated, every block is re-tiled exactly, the skip
+labels are re-tested, and all $38{,}280$ LG leaves of the $1{,}344$ blocks were re-proved from scratch with new trial
+families. Far: root coverage and tiling were checked throughout (every other cell re-classified; exact rationals);
+all closed-form labels were re-proved by a separate producer-side implementation; all table entries underwent the
+stated producer checks. The producer-side re-proof of certified boxes was full on $422$ of the $428$ std blocks
+($292{,}308$ boxes) and on $31$ E2 blocks ($1{,}871$ boxes); the other certified boxes were checked by sampling ($25$ per
+block), as detailed in the run log. Independent full re-certification and exact replay are reported separately. Two floating-point tests that do
+not use the label code: at $21{,}000$ random points of random leaves the assertion of the label holds; $20{,}000$ random
+convex pentagons are reconstructed from their coordinates $(q,t,u;j)$, with $q$ in a root. End-to-end tests on the
+complete covers (floating point): $110{,}000$ random strictly convex pentagons (among them $30{,}000$ adversarial shapes and
+$30{,}000$ near the sphere $|z-C|=\frac35$) are followed through the kept representation into a leaf of the far cover
+and, where the leaf hands over, of an edge chart; $100{,}000$ random points of the annulus of Theorem~\ref{thm:N} are
+followed into a leaf of the near cover. At every point the assertion of the final leaf holds (a pointwise lower bound
+of $F$ above $F^*$, or the chart distance below $\frac35$), and no point lies in a leaf of the wrong kind.
+
+\paragraph{Independent re-certification of Parts~II and~III (22--27 November 2026).} The second party's programs,
+written independently of the producer code, enumerate the $1{,}947{,}824$ targets of the near and far covers from the
+frozen input archive (identified by its SHA-256 in the release), search a witness of their own for each target, and a
+separate replay program re-checks every stored witness in exact arithmetic. They were run on the author's computer from
+22 November 2026. In the main run every target was certified except $13$ near LG boxes ($38{,}267$ of the $38{,}280$
+near targets). One of these $13$ was certified in a first supplementary round with the trial degree raised by two, and
+the other twelve in a second supplementary round restricted to them, which uses the following form of witness. Each
+original LG box is either certified in full or partitioned exactly into closed dyadic subboxes. A near-only
+supplementary subbox may be labelled \emph{outside} when its exact squared distance from $C$ is at least
+$(3/5+2^{-40})^2$. Such a subbox cannot contain the point of the annulus under consideration. Every remaining point of
+the annulus is contained in an LG subbox. At that point the polygon is simple by Lemma~\ref{lem:S}; positive fan
+determinants throughout that subbox make the winding number about the fan centre constant and equal to one. The LG
+inequality therefore applies at the point. No bound is asserted on an outside subbox. (The producer's certificates of
+Section~\ref{sec:near} hold on the whole of each box; outside subboxes occur only in this re-certification, and the
+proof of Theorem~\ref{thm:N} does not use the far cover.) The tree of the first supplementary round has $11$ LG leaves; the twelve trees of the second
+round consist of $86$ LG subboxes and $109$ outside subboxes. The replay is complete in all nine stages: each of the
+$1{,}947{,}824$ targets replayed as certified ($299{,}994$ labels of the standard chart through the quadrilateral table,
+which is itself certified in full), with no rejected witness and no unscanned shard. The producer read the same stored
+results with its own acceptance program: every target bound to the frozen covers, every outside subbox re-checked in
+exact arithmetic against $(3/5+2^{-40})^2$, and $400$ uniformly sampled LG leaves checked at two points each by a
+separate exact pointwise computation, without a failure. The lists of shard hashes of the two programs agree in all
+nine stages ($15{,}239$ shard files). The two reports and their SHA-256 values are part of the release.
+
+Second-party review (an AI reviewer with separately written programs; this is not peer review): see the table. No
+error has been found in the mathematics so far; gaps in the first version of the computation for
+Theorem~\ref{thm:L} (certificate data not exported, a floating-point error sum) were found by the review and closed, and a missing argument in the
+proof of Theorem~\ref{thm:N} (the winding number of the fan) was found and closed during the review. The reviewer's
+program for the box certificates was in turn read line by line by the producer and tested at $2{,}484$ points of
+$1{,}222$ of its certificates with a separate exact pointwise computation, without a failure.
+
+\section{Limitations}
+Non-convex pentagons are not covered. Numerical experiments suggest that the infimum of $F$ over them is $2\pi^2$,
+approached by squares with a vanishing notch; no assertion about general non-convex pentagons is proved here. Both the proof and its independent re-certification
+are computer-assisted and were produced by AI systems (Section~\ref{sec:ai}); the mathematical arguments have been
+checked by an AI reviewer, not by human experts, and the work has not been peer reviewed.
+
+\section{Roles of AI systems}\label{sec:ai}
+Claude (Anthropic) found the methods, wrote the proofs, the producer code and the producer-side checkers, and ran the
+computations in a sandbox. GPT (OpenAI) reviewed the mathematics and wrote independent programs for the second-party
+checks. The author initiated and coordinated the work, ran the computations on his own computer and decides on the
+release. The author did not establish the mathematical correctness by hand; responsibility for the publication lies
+with the author.
+
+\appendix
+\section{Proofs for Part III}\label{app:far}
+Every algebraic identity of this appendix has been verified symbolically, starting from the definitions and
+independently of the programs that compute the labels (\texttt{far\_formula\_check.py} in the supplementary material:
+$878$ exact checks, the last group comparing the formulas of the programs with the ones derived here).
+
+\begin{lemma}[ears]\label{lem:ear}
+Let $P$ be a strictly convex polygon and $C_k>0$. Then the lines of the edges $k-1$ and $k+1$ meet in
+$W=V_k+s\,e_{k-1}=V_{k+1}-r\,e_{k+1}$ with $s=B_k/C_k$, $r=A_k/C_k$; the triangle $(V_k,W,V_{k+1})$ lies outside $P$ and has
+area $A_kB_k/(2C_k)$; and the polygon $P^+$ obtained by replacing $V_k,V_{k+1}$ by $W$ is strictly convex, with the
+edge vectors of $P$ except that $e_k$ is removed and $e_{k\mp1}$ are multiplied by $1+s$, $1+r$.
+\end{lemma}
+\begin{proof}
+$s\,e_{k-1}+r\,e_{k+1}=e_k$ is solved by taking cross products with $e_{k\pm1}$; the area is $\frac12(s\,e_{k-1})\times e_k$,
+and $e_k\times(W-V_k)=-sA_k<0$. The consecutive cross products of the new edge vectors are positive, and the edge
+directions are those of $P$ without one, so the total turning is $2\pi$.
+\end{proof}
+A strictly convex pentagon has an edge with $C_k>0$: with the exterior angles $\theta_i\in(0,\pi)$,
+$C_k=|e_{k-1}||e_{k+1}|\sin(\theta_k+\theta_{k+1})$, and the five sums $\theta_k+\theta_{k+1}$ add up to $4\pi$.
+
+\paragraph{Normalisation.} $Q=P^+$ for a kept edge $k$ is a strictly convex quadrilateral with the vertex $W$. A
+similarity maps a longest edge of $Q$ to $q_0q_1$; the reflection $(x,y)\mapsto(1-x,y)$ exchanges the roles of $q_0,q_1$
+and of $q_2,q_3$, so $W\in\{q_3,q_0\}$ after a reflection. The two vertices of $P$ on the edges at $W$ cut away the
+fractions $t=s/(1+s)$, $u=r/(1+r)$ (in the appropriate order). If the base is a longest edge then $|q_2-q_1|,|q_3|\le1$,
+which gives $q\in\mathfrak B$.
+
+\paragraph{Edge vectors of $P$.} With $e_0,\dots,e_3$ the edge vectors of $Q$:
+$j=3$: $(e_0,\ e_1,\ (1-t)e_2,\ te_2+ue_3,\ (1-u)e_3)$; $j=0$: $((1-t)e_0,\ e_1,\ e_2,\ (1-u)e_3,\ te_0+ue_3)$. For the cut
+edge ($k=3$ resp.\ $4$) $A=(1-t)u\,\delta$, $B=t(1-u)\delta$, $C=(1-t)(1-u)\delta$ with $\delta=D$ resp.\ $q_{3y}$, so
+$\mathrm{ear}_{\rm cut}=tu\,\delta/2$ and $|P|=|Q|(1-tu\tau_j)$.
+
+\paragraph{The comparisons of label X.} For the other four edges one finds
+\begin{center}\small\begin{tabular}{@{}cccl@{}}\toprule
+$j$ & $k'$ & $C_{k'}$ & $\mathrm{ear}_{k'}<\mathrm{ear}_{\rm cut}$ (given $C_{k'}>0$) is equivalent to\\\midrule
+3 & 0 & $(1-u)M$ & $tu>q_{2y}q_{3y}/(DM)$\\
+3 & 1 & $(1-t)L$ & $tu>q_{2y}K/(LD)$\\
+3 & 2 & $tK-uM$ & $K(1-2t)+tuM<0$\\
+3 & 4 & $u\,q_{3y}+t(q_{2y}-q_{3y})$ & $q_{3y}(1-2u)-tu(q_{2y}-q_{3y})<0$\\
+0 & 1 & $(1-t)L$ & $tu>q_{2y}K/(q_{3y}L)$\\
+0 & 2 & $-(1-u)M$ & $tu>DK/(q_{3y}(-M))$\\
+0 & 0 & $uM+t\,q_{2y}$ & $q_{2y}(1-2t)-tuM<0$\\
+0 & 3 & $uD+t(q_{2y}-q_{3y})$ & $D(1-2u)-tu(q_{2y}-q_{3y})<0$\\\bottomrule
+\end{tabular}\end{center}
+For instance $j=3$, $k'=2$: $A=(1-t)K$, $B=(1-t)uD$, $C=tK-uM$, and $(1-t)^2uKD/(2C)<tuD/2$ is $(1-t)^2K<t(tK-uM)$.
+On a box, the first kind is tested with $\inf t\cdot\inf u$, the suprema of the factors of the numerator and the
+infima of those of the denominator; the second kind at the $64$ corners (the polynomials are multi-affine in each of
+the three charts). In the chart E3, with $r=h/q_{2y}$ and $x=q_{2x}$,
+$K=q_{2y}(r(x-1)+1-b)$, $L=q_{2y}(r-(1-b))$, $M=q_{2y}(r(x-1)-b)$, $q_{3y}=q_{2y}(b+r)$, $D=q_{2y}\,x\,r$,
+so the comparisons of the first kind depend on $(x,b,r,tu)$ only; at the face $q_{2y}=0=h$ they are verified for
+$r\in(0,1]$ and, divided by $r^2$, for $1/r\in[0,1]$.
+
+\begin{lemma}[ruled charts]\label{lem:ruled}
+In each of the charts std, E2, E3 and for $j=3,0$, every vertex of $P(\zeta)$ is affine in each coordinate, and for
+each coordinate $\zeta_m$ the derivatives $\partial_mV_i$, $i=0,\dots,4$, are parallel to one vector (depending on the
+other coordinates). Consequently every cross product of two vertex differences, the area, and every linear
+functional of the vertices is multi-affine; a multi-affine function $f$ satisfies $f(\zeta)=\sum_c\omega_c(\zeta)f(\zeta_c)$
+over the corners $\zeta_c$ of a box, with weights $\omega_c\ge0$, $\sum\omega_c=1$ independent of $f$; and a function that is
+concave in each coordinate attains its minimum over a box at a corner.
+\end{lemma}
+\begin{proof}
+The vertices of $P$ are combinations of $q_0,\dots,q_3$ with coefficients $1,t,1-t,u,1-u$. In the chart std a
+coordinate of $w$ moves $q_2$ or $q_3$ along a coordinate axis; in E2 the coordinates $q_{3x},q_{3y}$ move $q_3$ along an
+axis and $q_2$ by $a$ times the same vector, $a$ moves $q_2$ along $q_3-q_1$ and $h$ moves it along $(0,1)$; in E3
+$q_{2x},q_{2y}$ move $q_2$ along an axis and $q_3$ by $b$ times the same, $b$ moves $q_3$ along $q_2$ and $h$ along
+$(0,1)$; $t$ and $u$ move one vertex each. The second derivative in $\zeta_m$ of $(V_a-V_b)\times(V_c-V_d)$ is
+$2\,\partial_m(V_a-V_b)\times\partial_m(V_c-V_d)=0$. The weights are the products of the one-dimensional barycentric
+weights. For the last claim move one coordinate at a time to the end where the function is not larger.
+\end{proof}
+
+\paragraph{Hand-over.} Let $q$ be admissible in a std box labelled E2. From $0<K<\frac18(1-q_{3x})$ we get $1-q_{3x}>0$;
+with $a=(1-q_{2x})/(1-q_{3x})$ and $h=K/(1-q_{3x})\in(0,\frac18)$ the identity $K=q_{3y}(q_{2x}-1)+q_{2y}(1-q_{3x})$ gives
+$q_2=q_1+a(q_3-q_1)+h(0,1)$, and $|a|\,|q_3-q_1|\le|e_1|+h\le\frac98$ with $|q_3-q_1|\ge q_{3y}\ge\frac14$. For E3:
+$b=q_{3x}/q_{2x}$, $h=D/q_{2x}\in(0,\frac18)$, $|b|\le|q_{3x}|/q_{2x}\le4$.
+
+\paragraph{S(a).} Choose a non-negative rational $\tau$ such that, at every corner of the box and for every vertex
+pair $i,k$, $|P|-\tau|n|^{-2}(p_i-p_k)^2\ge0$, where $p=\langle V,n\rangle$; no division by a corner width is used (a
+degenerate corner may have $W_n=0$). For vertices $i,k$ this function is a multi-affine function minus the square of
+one, hence concave in each coordinate; by Lemma~\ref{lem:ruled} it is non-negative on the box. So
+$|P|\ge\tau|n|^{-2}W_n^2$ on the box. For a strictly convex member $W_n>0$, $P$ lies in a strip of width $W_n/|n|$, and
+$F(P)\ge\pi^2|n|^2|P|/W_n^2\ge\pi^2\tau$; the strict label requires $\pi^2\tau>F^*$.
+
+\paragraph{S(b).} For $l>0$ and $\max_kc_k>0$, with $H=\max_kc_k/l$, $P$ lies in a strip of width $H$ and contains a triangle with base $l$ and
+height $H$. On a box $\max_kc_k$ is at most the largest corner value, and $l^2$ at least the sum of the squares of the
+smallest corner moduli of the two components of $V_b-V_a$ (where these do not change sign).
+
+\paragraph{R.} $P$ is the intersection of its five edge half-planes; those of the edges $m+1,m+3,m+4$ intersect in
+$T\supset P$. Lemma~\ref{lem:ear} for the edge $m$ of $P$, then for the edge $m+2$ of $P^+$ (its $A$ and $C$ are those of
+$P$ times $1+r$, so the ear is the same) shows that $T$ is a triangle with $|T|=|P|+\mathrm{ear}_m+\mathrm{ear}_{m+2}$.
+On a box the ears are bounded by $\sup A\,\sup B/(2\inf C)$ and $|P|$ by its smallest corner value.
+
+\paragraph{O and N.} By Lemma~\ref{lem:ruled} every vertex of $P(\zeta)$ is a convex combination of its corner values,
+so $P(\zeta)$ lies in the hull of the $320$ corner vertices, $N_p-r_pD$ has modulus at most its largest corner
+modulus, and $|D|\ge\mathrm{Re}(D\bar e)\ge\min_{\rm corners}\mathrm{Re}(D\bar e)$.
+
+\paragraph{Roots.} A cell of $\mathfrak B$ is not a std root only if one of $q_{2y},q_{3y},K,D$ is $\le0$ at its corners
+(hence on the cell: no strictly convex $Q$) or one of $|e_1|^2,|e_2|^2,|e_3|^2$ exceeds $1$ on the cell (no admissible
+$q$). So every admissible $q$ lies in a root; likewise every strictly convex $Q$ of the edge-chart ranges.
+
+\begin{thebibliography}{99}
+\bibitem{ps} G.~P\'olya, G.~Szeg\H{o}, \emph{Isoperimetric Inequalities in Mathematical Physics}, Princeton, 1951.
+\bibitem{bb-jep} B.~Bogosel, D.~Bucur, On the polygonal Faber--Krahn inequality, \emph{J. \'Ec. polytech. Math.} 11 (2024) 19--105, doi:10.5802/jep.250.
+\bibitem{bb-val} B.~Bogosel, D.~Bucur, Polygonal Faber--Krahn inequality: local minimality via validated computing, arXiv:2406.11575.
+\bibitem{wang} H.~Wang, The P\'olya--Szeg\H{o} inequalities for polygons, arXiv:2611.22305 (17 November 2026).
+\bibitem{liu} Public repository \texttt{github.com/xfliu/polya-szego-conjecture}, maintained under the GitHub account \texttt{xfliu}; read at commit \texttt{bf7c9c288f56691745f6bcdf31c1128eaa937a93} (September 2026).
+\bibitem{cghl} Z.~Cheng, C.~Gui, Y.~Hu, Q.~Li, The P\'olya--Szeg\H{o} conjecture for convex polygons with many sides, arXiv:2609.18500 (2026).
+\bibitem{bbf} B.~Bogosel, D.~Bucur, I.~Fragal\`a, Proof of the local version of the P\'olya--Szeg\H{o} conjecture for the torsional rigidity of polygons, arXiv:2609.23051 (2026).
+\bibitem{lehmann} N.~J.~Lehmann, Beitr\"age zur numerischen L\"osung linearer Eigenwertprobleme I, II, \emph{Z. Angew. Math. Mech.} 29 (1949) 341--356; 30 (1950) 1--16.
+\bibitem{gh} F.~Goerisch, H.~Haunhorst, Eigenwertschranken f\"ur Eigenwertaufgaben mit partiellen Differentialgleichungen, \emph{Z. Angew. Math. Mech.} 65 (1985) 129--135.
+\bibitem{bg} H.~Behnke, F.~Goerisch, Inclusions for eigenvalues of selfadjoint problems, in: \emph{Topics in Validated Computations} (Oldenburg, 1993), Stud. Comput. Math. 5, North-Holland, 1994, 277--322.
+\bibitem{krahn} E.~Krahn, \"Uber Minimaleigenschaften der Kugel in drei und mehr Dimensionen, \emph{Acta Comm. Univ. Tartu (Dorpat)} A9 (1926) 1--44.
+\bibitem{hong} I.~Hong, On an inequality concerning the eigenvalue problem of membrane, \emph{K\={o}dai Math. Sem. Rep.} 6 (1954) 113--114.
+\bibitem{flint} The FLINT team, \emph{FLINT: Fast Library for Number Theory}, version 3, \texttt{flintlib.org}; F.~Johansson, Arb: efficient arbitrary-precision midpoint-radius interval arithmetic, \emph{IEEE Trans. Comput.} 66 (2017) 1281--1292.
+\bibitem{bbf2} B.~Bogosel, D.~Bucur, I.~Fragal\`a, Proof of the polygonal Saint-Venant inequality conjectured by P\'olya--Szeg\"o, arXiv:2611.24573 (18 November 2026).
+\bibitem{v10} P.~Sun, \texttt{pentagon-paqc-proofs}, version~1.0, \texttt{github.com/PYCSON/pentagon-paqc-proofs}, released 1 November 2026.
+\bibitem{makai} E.~Makai, On the principal frequency of a membrane and the torsional rigidity of a beam, in: \emph{Studies in Mathematical Analysis and Related Topics}, Stanford Univ. Press, 1962, 227--231.
+\end{thebibliography}
+\end{document}

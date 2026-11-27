@@ -1,0 +1,46 @@
+{
+  "part": "near_theorem (Theorem N)",
+  "date": "2026-11-27",
+  "status": "computer-assisted proof candidate, not peer reviewed",
+  "producer_runs": [
+    {
+      "where": "sandbox",
+      "date": "2026-11-16",
+      "result": "complete, no unresolved leaf",
+      "check": "near_lg_verify.py --sample 1: VERIFY OK; all leaves of all 1,344 blocks re-proved from scratch with new trial families (18,650 leaves of the 1,201 smallest blocks on 2026-11-18, 19,630 leaves of the other 143 blocks on 2026-11-20): all passed"
+    },
+    {
+      "where": "author's computer",
+      "date": "2026-11-17",
+      "result": "complete, no unresolved leaf",
+      "check": "near_lg_verify.py --sample 3: VERIFY OK"
+    }
+  ],
+  "second_party": [
+    {
+      "item": "Lemma LG, fan flux, formulas of the box certificate (computation C)",
+      "status": "passed",
+      "ref": "review PENT-21"
+    },
+    {
+      "item": "Lemma S (simplicity), mirror step, root cube, order and direction of the skip tests, cover argument",
+      "status": "passed (cover argument conditional on the certified leaves)",
+      "ref": "PENT-23"
+    },
+    {
+      "item": "structure: 4^6 root cells re-classified, 1,344 blocks, tiling of every block, all 13,118 far and 36 inner leaves re-tested",
+      "status": "passed, twice with own programs; robust against the uncertainty of the centre",
+      "ref": "PENT-23, PENT-24"
+    },
+    {
+      "item": "independent exact program for the box certificate (package r3; outside route of PENT-26a for the supplementary round 2)",
+      "status": "complete: all 38,280 near targets re-proved on the author's computer by the independent program (38,267 in the main run, 1 in a first supplementary round with the trial degree raised by two, 12 in a second supplementary round with outside subboxes: 86 LG and 109 outside subboxes), 22-26 November 2026; every stored witness replayed; the producer's acceptance program agrees shard by shard",
+      "ref": "PENT-24, PENT-24b, PENT-24c, PENT-26a, PENT-26b; convex_theorem/second_party/final_reports/ (repository-relative; replay report SHA-256 a9cd3b826d39b0e098aacebe1f192d7bb7fd71f2911a82f94671883ca1e48736, acceptance report 4f77091685bd1c4ca8753aeddfe6096838f30d4d4867da6f034bceb20ef42b50, comparison: CONSISTENT on all nine stages, 15,239 shard files)"
+    },
+    {
+      "item": "signature on Theorem N",
+      "status": "signed by the second party (PENT-26, 2026-11-28)",
+      "ref": "PENT-26"
+    }
+  ]
+}

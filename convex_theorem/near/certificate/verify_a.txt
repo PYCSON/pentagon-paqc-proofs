@@ -1,0 +1,2 @@
+blocks checked 672 of 1344, leaves {"LG": 19674, "far": 6694, "inner": 17}, LG leaves re-proved 672
+VERIFY OK (partial: 672 of 1344 blocks)

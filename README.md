@@ -1,17 +1,21 @@
 # pentagon-paqc-proofs
 
-**Status: computer-assisted proof candidate (for the stated cells and the stated ball), not peer reviewed.**
-Version 1.1 (23 November 2026; adds `local_theorem/`). Version 1.0: 1 November 2026. Author: Puyi Sun (ORCID [0009-0004-1644-5300](https://orcid.org/0009-0004-1644-5300)).
+**Status: computer-assisted proof candidates (for the stated cells, the stated ball and, in version 2.0, all convex
+pentagons), not peer reviewed.**
+Version 2.0 (28 November 2026; adds `convex_theorem/`). Version 1.1: 23 November 2026. Version 1.0: 1 November 2026. Author: Puyi Sun (ORCID [0009-0004-1644-5300](https://orcid.org/0009-0004-1644-5300)).
 
 ## Problem
 For a planar domain Ω let F(Ω) = λ₁(Ω)·|Ω|, where λ₁ is the first Dirichlet eigenvalue of the Laplacian.
 The Pólya–Szegő conjecture (1951) says that among all pentagons the regular one minimises F. Its value is F\* ≈ 18.9191043.
 The conjecture was open when version 1.0 was released. A preprint by H. Wang (arXiv:2611.22305, dated 17 November
 2026) claims a proof for all simple polygons with at most n sides, n ≥ 5, which contains the pentagon case; it has
-not been peer reviewed, and we have not checked it. Neither version of this repository depends on it.
+not been peer reviewed, and we have not checked it. No version of this repository depends on it. B. Bogosel,
+D. Bucur and I. Fragalà (arXiv:2611.24573, 18 November 2026) posted a preprint claiming an analytic proof of the companion inequality
+for the torsional rigidity (all n ≥ 3); it concerns a different functional and is not used here.
 
 ## Result
-This repository does **not** prove the conjecture. It contains:
+This repository does **not** prove the conjecture: version 2.0 (below) treats the convex pentagons only. Version 1.0
+contains:
 
 1. **A method (PAQC)** that certifies F(P) > F\* simultaneously for *every* pentagon P in a six-dimensional box ("cell")
    of the shape chart V₀=(0,0), V₁=(1,0), (V₂,V₃,V₄)=x ∈ ℝ⁶. It uses only:
@@ -41,6 +45,24 @@ recomputed by the second party (an AI reviewer) with separately written programs
 this is not peer review.
 It does not prove the conjecture. See `local_theorem/README.md`.
 
+### Version 2.0: all convex pentagons (`convex_theorem/`)
+A computer-assisted proof candidate that F(P) ≥ F(P_reg) for **every convex pentagon** P, with equality only for
+pentagons similar to the regular pentagon P_reg. The proof has three parts: the explicit ball of version 1.1 (Theorem L); an annulus around it
+covered by boxes, on each of which one Lehmann–Goerisch certificate holds for all pentagons of the box (Theorem N);
+and the rest of the convex pentagons, treated in a chart in which a pentagon is a quadrilateral with a corner cut off
+(Theorem F). Every decision is an inequality between exact rational numbers or a statement of ball arithmetic, and the
+certificates can be replayed box by box. All frozen tasks were independently re-certified and replayed by the second party (an AI reviewer) with
+separately written programs, including the documented supplementary tasks and the quadrilateral-table dependencies;
+see the signed reports in `convex_theorem/second_party/`. This is not peer review. Non-convex pentagons are **not** covered.
+Notation: in `convex_theorem/` and its paper, F\* denotes the comparison threshold 18.919134195733914 (exact
+decimal), a number slightly above F(P_reg) ≈ 18.919104, which Theorem L encloses in [18.9191028942, 18.9191047951];
+in the version 1.0 text above, F\* denotes the value F(P_reg) itself.
+This work was carried out independently of H. Wang's preprint (arXiv:2611.22305), which claims a proof for all simple
+polygons with at most n ≥ 5 sides and so contains the convex pentagons: version 1.0 of this repository, an earlier
+stage on the same problem and in the same chart, was released on 1 November 2026, and we learned of the preprint on
+23 November 2026, after the certificates of version 2.0 had been computed. Version 2.0 uses no argument of it, uses a
+different method, and makes no priority claim. See `convex_theorem/README.md`.
+
 ### Erratum to version 1.0, Section 6 (cost estimate)
 The CPU-day figures of Section 6 of version 1.0 estimate a continuum proxy, not the cost of a constructed rigorous
 cover, and need correction for the cost-accounting convention and for the two mirror-related representatives of each
@@ -50,6 +72,7 @@ change the six archived PAQC certificates or the local result of version 1.1. Th
 ## Files
 | path | content |
 |---|---|
+| `convex_theorem/` | version 2.0: the theorem for all convex pentagons: paper, proofs, near and far certificates, producer programs and checkers, the second party's programs and reports; own README and manifests |
 | `local_theorem/` | version 1.1: Theorem L (explicit ball of strict minimality), its paper, proof, certificate, checker, producer and second-party review; own README and manifest |
 | `paper/paper.pdf`, `paper/paper.tex` | the note (`main.tex` is the template filled by `tools/make_paper.py`) |
 | `certificates/*_v6.json` | one file per cell: binary64 cell endpoints, 64 corner eigenvalue certificates, the geometry or branch-and-bound record (accepted leaves) |
@@ -105,6 +128,9 @@ repository's layout); the link above provides it.
 - Evidence Press: n = 7, 8 local minimality (doi:10.5281/zenodo.23066520; not peer reviewed).
 - X. Liu: explicit local ball and outward continuation prototype, github.com/xfliu/polya-szego-conjecture.
 - Z. Cheng, C. Gui, Y. Hu, Q. Li: convex polygons with many sides (arXiv:2609.18500).
+- B. Bogosel, D. Bucur, I. Fragalà: local version for the torsional rigidity (arXiv:2609.23051); the polygonal
+  Saint-Venant inequality (arXiv:2611.24573).
+- H. Wang: claimed proof of the Pólya–Szegő inequalities for polygons (arXiv:2611.22305; not used here).
 - Fox–Henrici–Moler and Moler–Payne (eigenvalue bounds from a boundary residual); Krahn, Hong and Szegő (the bound for
   λ₂ used to identify λ₁); Liu–Oishi (validated eigenvalue bounds on polygons, not used here but related); Efron–Stein.
 - Our certificates rely on Arb/python-flint (F. Johansson) and mpmath.
@@ -118,4 +144,5 @@ repository's layout); the link above provides it.
   correctness by hand; responsibility for the publication and its correctness lies with him.
 
 ## Licence
-Text and data: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Code: MIT (see `LICENSE-MIT.txt`).
+Text and owned data: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Owned source code: MIT (see
+`LICENSE-MIT.txt`). Third-party material retains its stated terms. The same terms apply to `convex_theorem/`.

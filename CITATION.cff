@@ -1,13 +1,15 @@
 cff-version: 1.2.0
 message: "If you use these certificates, checkers or the method, please cite them as below."
 type: software
-title: "Certified lower bounds for λ1·Area on cells of pentagon shape space by piecewise-affine transplantation, and an explicit ball of strict minimality of the regular pentagon (computer-assisted proof candidate for the stated cells and ball, not peer reviewed)"
+title: "Certified lower bounds for λ1·Area on cells of pentagon shape space by piecewise-affine transplantation, an explicit ball of strict minimality of the regular pentagon, and the Pólya–Szegő inequality for convex pentagons (computer-assisted proof candidates, not peer reviewed)"
 authors:
   - family-names: "Sun"
     given-names: "Puyi"
     orcid: "https://orcid.org/0009-0004-1644-5300"
-version: "1.1"
-license: "CC-BY-4.0"
+version: "2.0"
+license:
+  - "CC-BY-4.0"
+  - "MIT"
 repository-code: "https://github.com/PYCSON/pentagon-paqc-proofs"
 keywords:
   - "Pólya–Szegő conjecture"

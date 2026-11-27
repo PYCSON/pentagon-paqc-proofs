@@ -1,0 +1,79 @@
+{
+  "part": "far_theorem (Theorem F)",
+  "date": "2026-11-27",
+  "status": "computer-assisted proof candidate, not peer reviewed",
+  "producer_runs": [
+    {
+      "where": "author's computer",
+      "date": "2026-11-18/19",
+      "package": "pent_far5 (commit f30df709)",
+      "result": "1,260 / 1,260 blocks, 1,724,444 boxes, no unresolved leaf, 116 CPU hours",
+      "check": "self-check crashed there (segmentation fault); repeated in a second environment on the same data: VERIFY OK"
+    },
+    {
+      "where": "sandbox",
+      "date": "2026-11-17/19",
+      "package": "pent_far5",
+      "result": "225 of 1,260 blocks, no unresolved leaf, every self-check VERIFY OK",
+      "check": "204 block summaries compared with the author's run: 156 identical, 48 same label counts, 0 different"
+    }
+  ],
+  "second_implementation_by_producer": [
+    {
+      "item": "root ranges of the three charts",
+      "program": "far_root_spot.py",
+      "data": "all",
+      "result": "complete"
+    },
+    {
+      "item": "tiling of every column",
+      "program": "far_tiling_spot.py",
+      "data": "all",
+      "result": "no failure"
+    },
+    {
+      "item": "every closed-form label",
+      "program": "far_label_spot.py + label_subdivide.py",
+      "data": "all 1,346,929 leaves",
+      "result": "all re-proved (13 after one bisection)"
+    },
+    {
+      "item": "closed forms of the ear comparisons",
+      "program": "far_formula_check.py (SymPy) and by hand",
+      "data": "-",
+      "result": "agree"
+    }
+  ],
+  "second_party": [
+    {
+      "item": "Lemma LG and the box certificate (computation C)",
+      "status": "passed",
+      "ref": "review PENT-21"
+    },
+    {
+      "item": "kept representation, corner principle, root ranges and hand-over, eight ear comparisons, strips, fibre lemmas, cover argument",
+      "status": "passed (cover argument conditional on the labels and certificates)",
+      "ref": "PENT-22"
+    },
+    {
+      "item": "structure: 1,260 blocks, 196,798 root columns, 1,724,444 boxes; completeness of the roots of the three charts; quadrilateral table (57,093 roots, parts, root values)",
+      "status": "passed with own programs",
+      "ref": "PENT-24"
+    },
+    {
+      "item": "label and table criteria: independent implementation and ledger of statements and proofs",
+      "status": "complete: all 185,100 table entries and all 1,346,929 labels re-proved and replayed (see the next item)",
+      "ref": "PENT-24b, PENT-24c"
+    },
+    {
+      "item": "certified boxes, table and labels: independent exact program (package r3)",
+      "status": "complete: all 377,515 certified boxes (far_std 293,846, far_E2 47,804, far_E3 35,865), all 185,100 table entries and all 1,346,929 labels (299,994 of them through the table) re-proved on the author's computer by the independent program, 22-24 November 2026; every stored witness replayed (finished 27 November 2026); the producer's acceptance program agrees shard by shard",
+      "ref": "PENT-24, PENT-24b, PENT-24c, PENT-26b; convex_theorem/second_party/final_reports/ (repository-relative; replay report SHA-256 a9cd3b826d39b0e098aacebe1f192d7bb7fd71f2911a82f94671883ca1e48736, acceptance report 4f77091685bd1c4ca8753aeddfe6096838f30d4d4867da6f034bceb20ef42b50, comparison: CONSISTENT on all nine stages, 15,239 shard files)"
+    },
+    {
+      "item": "signature on Theorem F",
+      "status": "signed by the second party (PENT-26, 2026-11-28)",
+      "ref": "PENT-26"
+    }
+  ]
+}

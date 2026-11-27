@@ -1,0 +1,2 @@
+std: blocks checked 214 (unfinished 0), columns 57304, boxes 625731, T1 leaves 0, labels {'C': 149232, 'E2': 7258, 'E3': 9365, 'N': 42464, 'O': 8732, 'R': 312, 'S': 10039, 'T': 166757, 'TX': 7130, 'V': 27, 'X': 224415}, table: roots with a bound 28652, LG entries re-proved 21972, tangent-bound entries not re-proved 0
+VERIFY OK

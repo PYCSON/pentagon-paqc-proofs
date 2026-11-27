@@ -1,0 +1,5 @@
+{'columns': 196798, 'boxes': 1724444, 'blocks': 1260} failures: 0 []
+
+real	4m54.507s
+user	4m49.880s
+sys	0m0.541s

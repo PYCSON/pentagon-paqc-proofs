@@ -1,0 +1,24 @@
+E2   O   {'re-proved': 2376}
+E2   R   {'re-proved': 40}
+E2   S   {'re-proved': 1150}
+E2   T   {'re-proved': 7053}
+E2   TX  {'re-proved': 2714}
+E2   X   {'re-proved': 8756}
+E3   O   {'re-proved': 2266}
+E3   R   {'re-proved': 229}
+E3   S   {'re-proved': 272}
+E3   T   {'re-proved': 10097, 'not reproduced': 1}
+E3   TX  {'re-proved': 1541}
+E3   V   {'re-proved': 78}
+E3   X   {'re-proved': 9252}
+std  E2  {'re-proved': 1402}
+std  E3  {'re-proved': 1964}
+std  N   {'re-proved': 14311}
+std  O   {'re-proved': 1406}
+std  R   {'re-proved': 73}
+std  S   {'re-proved': 1521}
+std  T   {'re-proved': 47570}
+std  TX  {'re-proved': 1318}
+std  V   {'re-proved': 10}
+std  X   {'re-proved': 62885}
+not reproduced (first 30): [('E3', '16_6', [16, 6, 7, 1], 0, 'T')]

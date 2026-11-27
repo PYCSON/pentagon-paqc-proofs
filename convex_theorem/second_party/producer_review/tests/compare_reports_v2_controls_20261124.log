@@ -1,0 +1,20 @@
+PASS legal: replay24c combined listings             expected ACCEPT  got CONSISTENT      
+PASS legal: replay26a per-round listings            expected ACCEPT  got CONSISTENT      
+PASS both sides claim target 1 (wrong totals)       expected REJECT  got NOT CONSISTENT  - Claude near: targets 1, fixed 38280 | - GPT near: proved 1, target 38280
+PASS extra MISSING and ERROR                        expected REJECT  got NOT CONSISTENT  - GPT far_E2: other statuses {"ERROR": 1, "MISSING": 3}
+PASS CONDITIONAL_TABLE in near                      expected REJECT  got NOT CONSISTENT  - GPT near: proved 38279, target 38280 | - GPT near: other statuses {"CONDITIONAL_TABLE": 1}
+PASS sample run                                     expected REJECT  got NOT CONSISTENT  - sample run (plan sample 5, summary sample 5)
+PASS attempt_reject_stages absent                   expected REJECT  got NOT CONSISTENT  - GPT attempt_reject_stages is '<absent>'
+PASS MISSING pseudo-hash in main listing            expected REJECT  got NOT CONSISTENT  - GPT: malformed listing line in replay/q_lg.shards.sha256: 'MISSING  main/q_lg/000000.jsonl' | - Claude: malformed listing line in claude_shards/q_lg.shards.sha256: 'MISSING  main/q_lg/000000.jsonl'
+PASS duplicate listing line                         expected REJECT  got NOT CONSISTENT  - GPT: duplicate listing entry main/far_std/000005.jsonl x2 | - Claude: duplicate listing entry main/far_std/000005.jsonl x2
+PASS ACCEPT after a rejected line                   expected REJECT  got NOT CONSISTENT  - Claude report: 'rejected:' in line '         rejected: {"bound below the target value": 1}'
+PASS spot check with too few leaves                 expected REJECT  got NOT CONSISTENT  - Claude report: spot check 10 leaves x 2 points, 0 failures, margin 1e-3
+PASS Claude report not for all stages               expected REJECT  got NOT CONSISTENT  - Claude report: header does not request all nine stages: 'accept_pent24 v2 2026-11-26 10:00:00 stages near,q_lg supplements -'
+PASS one main shard missing on both sides           expected REJECT  got NOT CONSISTENT  - B_E3: 1768 main shards, fixed 1769
+PASS one shard hash differs on one side             expected REJECT  got NOT CONSISTENT  - near: shard listings differ (only GPT 0, only Claude 1)
+PASS a gate is the string "true"                    expected REJECT  got NOT CONSISTENT  - GPT gate structure is 'true'
+PASS wrong code identity                            expected REJECT  got NOT CONSISTENT  - identity: code 0000000000000000000000000000000000000000000000000000000000000000 / zip 1aba5f0a693313b515d9b3b0952747cd61ced2b4b5fb2d3c9c5783333ff2f958
+PASS unsafe member name in an archive               expected REJECT  got NOT CONSISTENT  - GPT archive: unsafe member name '../evil.txt'
+PASS table not closed but B_std conditional counted expected REJECT  got NOT CONSISTENT  - GPT gate q_table_closed is False | - GPT B_std: proved 933801, target 934801
+PASS line in the wrong stage file                   expected REJECT  got NOT CONSISTENT  - GPT: line in the wrong listing file replay/near.shards.sha256: 50e721e49c013f00c62cf59f2163542a9d8df02464efeb615d31051b0fddc326  main/q_lg/999999.jsonl | - Claude: line in the wrong listing file claude_shards/near.shards.sha256: 50e721e49c013f00c62cf59f2163542a9d8df02464efeb615d31051b0fddc326  main/q_lg/999999.jsonl
+19 / 19 controls behave as expected

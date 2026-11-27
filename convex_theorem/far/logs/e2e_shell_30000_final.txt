@@ -1,0 +1,9 @@
+pentagons 30000 final leaves: {'E2 C': 5, 'E2 T': 2, 'E3 T': 1, 'handed to E2': 7, 'handed to E3': 1, 'std C': 19608, 'std N': 1170, 'std T': 9206, 'std TX': 8}
+inconclusive (pointwise lower bound below F*_up): {}
+PASS
+
+real	20m19.406s
+user	20m2.949s
+sys	0m4.012s
+
+[exited with code 0]

@@ -1,0 +1,7 @@
+std: cells 262144, kept here 55501, roots of the run 57093 (complete: True); kept here but not a root: 0 []; roots not kept here: 1592; roots with other bounds: 0
+E2: cells 110592, kept here 15646, roots of the run 15646 (complete: True); kept here but not a root: 0 []; roots not kept here: 0; roots with other bounds: 0
+E3: cells 114688, kept here 25660, roots of the run 25660 (complete: True); kept here but not a root: 0 []; roots not kept here: 0; roots with other bounds: 0
+
+real	1m40.343s
+user	1m38.822s
+sys	0m0.141s

@@ -1,0 +1,24 @@
+progress 25 {'OK': 50} smallest relative margin 1.140e-04
+progress 50 {'OK': 100} smallest relative margin 1.140e-04
+progress 75 {'OK': 150} smallest relative margin 3.153e-05
+progress 100 {'OK': 200} smallest relative margin 3.153e-05
+progress 125 {'OK': 250} smallest relative margin 3.153e-05
+progress 150 {'OK': 300} smallest relative margin 3.153e-05
+progress 175 {'OK': 350} smallest relative margin 3.153e-05
+progress 200 {'OK': 400} smallest relative margin 3.153e-05
+progress 225 {'OK': 450} smallest relative margin 3.153e-05
+progress 250 {'OK': 500} smallest relative margin 3.153e-05
+progress 275 {'OK': 550} smallest relative margin 3.153e-05
+progress 300 {'OK': 600} smallest relative margin 3.153e-05
+progress 325 {'OK': 650} smallest relative margin 3.153e-05
+progress 350 {'OK': 700} smallest relative margin 1.757e-05
+progress 375 {'OK': 750} smallest relative margin 1.757e-05
+progress 400 {'OK': 800} smallest relative margin 1.757e-05
+progress 425 {'OK': 850} smallest relative margin 1.757e-05
+progress 450 {'OK': 900} smallest relative margin 1.757e-05
+progress 475 {'OK': 950} smallest relative margin 1.757e-05
+progress 500 {'OK': 1000} smallest relative margin 1.757e-05
+progress 525 {'OK': 1050} smallest relative margin 1.757e-05
+progress 550 {'OK': 1100} smallest relative margin 1.757e-05
+progress 575 {'OK': 1150} smallest relative margin 1.757e-05
+RESULT witnesses 582 points {'OK': 1164} smallest relative margin 1.757e-05
